@@ -1,0 +1,2642 @@
+.identity-section {
+  --identity-x: 50%;
+  --identity-y: 50%;
+  --identity-mouse-x: 0;
+  --identity-mouse-y: 0;
+  --identity-drift-x: 0px;
+  --identity-drift-y: 0px;
+  --identity-progress: 0;
+  --identity-pointer-strength: 1;
+  --identity-bg: #050505;
+  --identity-fg: #f5f5f5;
+  --identity-muted: rgba(255,255,255,0.32);
+  --identity-soft: rgba(255,255,255,0.18);
+  --identity-faint: rgba(255,255,255,0.08);
+  --identity-line: rgba(255,255,255,0.07);
+  --identity-ease: cubic-bezier(.16,1,.3,1);
+  --identity-ease-soft: cubic-bezier(.2,.8,.2,1);
+  --identity-width: min(1400px, 88vw);
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--identity-bg);
+  color: var(--identity-fg);
+  contain: paint;
+}
+
+.identity-section,
+.identity-section * {
+  box-sizing: border-box;
+}
+
+.identity-section::selection {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
+
+
+.identity-section::after {
+  pointer-events: none;
+}
+
+/* ============================================================================
+   BACKGROUND ATMOSPHERE
+   ============================================================================ */
+
+.identity-atmosphere {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at var(--identity-x) var(--identity-y),
+      rgba(255,255,255,0.055),
+      rgba(255,255,255,0.018) 28%,
+      transparent 58%
+    );
+  filter: blur(20px);
+  opacity: .72;
+  transition: transform 1.2s var(--identity-ease-soft);
+  z-index: -5;
+  will-change: transform;
+}
+
+.identity-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255,255,255,0.025),
+      transparent 42%
+    );
+  animation: identityAtmosphereBreathe 8s ease-in-out infinite;
+}
+
+.identity-atmosphere::after {
+  content: "";
+  position: absolute;
+  width: 72vw;
+  height: 72vw;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.035),
+      rgba(255,255,255,0.012) 35%,
+      transparent 70%
+    );
+  filter: blur(26px);
+  animation: identityAtmosphereOrb 11s ease-in-out infinite;
+}
+
+@keyframes identityAtmosphereBreathe {
+  0%, 100% {
+    opacity: .45;
+    transform: scale(.96);
+  }
+  50% {
+    opacity: .9;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes identityAtmosphereOrb {
+  0%, 100% {
+    opacity: .45;
+    transform: translate(-50%, -50%) scale(.94);
+  }
+  50% {
+    opacity: .9;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+/* ============================================================================
+   TECHNICAL GRID
+   ============================================================================ */
+
+.identity-grid {
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+  opacity: .28;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 90px 90px;
+  transform:
+    translate3d(
+      calc(var(--identity-drift-x) * .5 + var(--identity-mouse-x) * 10px),
+      calc(var(--identity-drift-y) * .5 + var(--identity-mouse-y) * 10px),
+      0
+    )
+    scale(1.08);
+  animation: identityGridDrift 24s linear infinite;
+  z-index: -4;
+  will-change: transform, background-position;
+}
+
+.identity-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,.04) 50%, transparent 100%);
+  background-size: 42% 100%;
+  background-repeat: no-repeat;
+  animation: identityGridSweep 12s ease-in-out infinite;
+}
+
+.identity-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,.22) 68%, rgba(0,0,0,.62) 100%);
+}
+
+@keyframes identityGridDrift {
+  0% {
+    background-position: 0 0, 0 0;
+    transform:
+      translate3d(
+        calc(var(--identity-drift-x) * .5 + var(--identity-mouse-x) * 10px),
+        calc(var(--identity-drift-y) * .5 + var(--identity-mouse-y) * 10px),
+        0
+      ) scale(1.08);
+  }
+  50% {
+    background-position: 45px 45px, 45px 45px;
+    transform:
+      translate3d(
+        calc(var(--identity-drift-x) * .5 + var(--identity-mouse-x) * 10px - 18px),
+        calc(var(--identity-drift-y) * .5 + var(--identity-mouse-y) * 10px + 12px),
+        0
+      ) scale(1.08);
+  }
+  100% {
+    background-position: 90px 90px, 90px 90px;
+    transform:
+      translate3d(
+        calc(var(--identity-drift-x) * .5 + var(--identity-mouse-x) * 10px),
+        calc(var(--identity-drift-y) * .5 + var(--identity-mouse-y) * 10px),
+        0
+      ) scale(1.08);
+  }
+}
+
+@keyframes identityGridSweep {
+  0%, 65%, 100% {
+    opacity: 0;
+    transform: translateX(-35%);
+  }
+  72% {
+    opacity: .8;
+  }
+  86% {
+    opacity: 0;
+    transform: translateX(35%);
+  }
+}
+
+/* ============================================================================
+   PARTICLES / MICRO FIELD
+   ============================================================================ */
+
+.identity-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .16;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.55) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,.25) 1px, transparent 1px);
+  background-size: 170px 170px, 113px 113px;
+  background-position: 0 0, 40px 70px;
+  animation: identityParticles 30s linear infinite;
+  z-index: -3;
+}
+
+.identity-particles::before,
+.identity-particles::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.identity-particles::before {
+  background-image: radial-gradient(circle, rgba(255,255,255,.38) 1px, transparent 1px);
+  background-size: 230px 230px;
+  animation: identityParticlesFar 46s linear infinite reverse;
+}
+
+.identity-particles::after {
+  background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.48) 100%);
+}
+
+@keyframes identityParticles {
+  from {
+    background-position: 0 0, 40px 70px;
+  }
+  to {
+    background-position: 170px -170px, -73px 183px;
+  }
+}
+
+@keyframes identityParticlesFar {
+  from {
+    transform: translate3d(0,0,0);
+  }
+  to {
+    transform: translate3d(-115px,85px,0);
+  }
+}
+
+/* ============================================================================
+   POINTER LIGHT
+   ============================================================================ */
+
+.identity-section::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  left: var(--identity-x);
+  top: var(--identity-y);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.055), rgba(255,255,255,.018) 34%, transparent 68%);
+  filter: blur(30px);
+  opacity: .65;
+  transition:
+    left .8s var(--identity-ease-soft),
+    top .8s var(--identity-ease-soft),
+    opacity .5s ease;
+  z-index: -2;
+}
+
+.identity-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 45%, transparent 25%, rgba(0,0,0,.12) 70%, rgba(0,0,0,.55) 100%);
+  z-index: -1;
+}
+
+/* ============================================================================
+   SCANLINE
+   ============================================================================ */
+
+.identity-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+  box-shadow: 0 0 35px rgba(255,255,255,.08);
+  opacity: .55;
+  pointer-events: none;
+  animation: identityScan 9s ease-in-out infinite;
+  z-index: -1;
+}
+
+.identity-scanline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -5px;
+  height: 11px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.025), transparent);
+  filter: blur(5px);
+}
+
+@keyframes identityScan {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(60vh);
+    opacity: .8;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+   INNER LAYOUT
+   ============================================================================ */
+
+.identity-inner {
+  position: relative;
+  width: var(--identity-width);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 42px 0 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.identity-inner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.06) 18%, rgba(255,255,255,.03) 82%, transparent);
+  opacity: .7;
+}
+
+.identity-inner::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.04) 20%, rgba(255,255,255,.025) 80%, transparent);
+  opacity: .5;
+}
+
+/* ============================================================================
+   SECTION LABEL
+   ============================================================================ */
+
+.identity-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 18px;
+  font-size: 9px;
+  letter-spacing: .22em;
+  line-height: 1;
+  color: rgba(255,255,255,.3);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .8s ease, transform .8s var(--identity-ease);
+}
+
+.identity-label::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,.5), transparent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1s var(--identity-ease) .15s;
+}
+
+.identity-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: min(240px, 25vw);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,.08), transparent);
+}
+
+.identity-label span:first-child {
+  color: rgba(255,255,255,.72);
+}
+
+.identity-label span:last-child {
+  color: rgba(255,255,255,.27);
+}
+
+.identity-section[data-visible="true"] .identity-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.identity-section[data-visible="true"] .identity-label::before {
+  transform: scaleX(1);
+}
+
+.identity-live {
+  margin-left: auto;
+  color: rgba(255,255,255,.38);
+  animation: identityStatusPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes identityStatusPulse {
+  0%, 100% {
+    opacity: .3;
+    transform: scale(.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================================
+   TELEMETRY
+   ============================================================================ */
+
+.identity-telemetry {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 8px;
+  line-height: 1.35;
+  letter-spacing: .16em;
+  color: rgba(255,255,255,.22);
+  pointer-events: none;
+  animation: identityTelemetryFloat 6s ease-in-out infinite;
+  user-select: none;
+}
+
+.identity-telemetry strong {
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255,255,255,.48);
+}
+
+.identity-telemetry::before {
+  content: "";
+  width: 14px;
+  height: 1px;
+  background: rgba(255,255,255,.2);
+  margin-bottom: 3px;
+}
+
+.identity-telemetry-one {
+  top: 22%;
+  left: 5%;
+}
+
+.identity-telemetry-two {
+  top: 32%;
+  right: 5%;
+  animation-delay: -2s;
+}
+
+.identity-telemetry-three {
+  bottom: 18%;
+  right: 8%;
+  animation-delay: -4s;
+}
+
+@keyframes identityTelemetryFloat {
+  0%, 100% {
+    transform: translate3d(0,0,0);
+  }
+  50% {
+    transform: translate3d(0,-8px,0);
+  }
+}
+
+/* ============================================================================
+   HEADING AREA
+   ============================================================================ */
+
+.identity-heading {
+  position: relative;
+  margin-top: auto;
+  margin-bottom: 70px;
+  padding-top: 10vh;
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.identity-heading::before {
+  content: "";
+  position: absolute;
+  left: -3vw;
+  right: -3vw;
+  bottom: -42px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.06) 20%, rgba(255,255,255,.02) 80%, transparent);
+  transform: scaleX(.3);
+  transform-origin: center;
+  transition: transform 1.4s var(--identity-ease) .55s;
+}
+
+.identity-section[data-visible="true"] .identity-heading {
+  animation: identityReveal 1s var(--identity-ease) .1s forwards;
+}
+
+.identity-section[data-visible="true"] .identity-heading::before {
+  transform: scaleX(1);
+}
+
+@keyframes identityReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.identity-kicker {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 22px;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: .24em;
+  color: rgba(255,255,255,.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s ease .1s, transform .8s var(--identity-ease) .1s;
+}
+
+.identity-kicker::before {
+  content: "//";
+  display: inline-block;
+  margin-right: 10px;
+  color: rgba(255,255,255,.18);
+}
+
+.identity-kicker::after {
+  content: "";
+  position: absolute;
+  left: -100%;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+}
+
+.identity-section[data-visible="true"] .identity-kicker {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.identity-section[data-visible="true"] .identity-kicker::after {
+  animation: identityKickerScan 2.5s ease-in-out .5s infinite;
+}
+
+@keyframes identityKickerScan {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.identity-heading h2 {
+  position: relative;
+  margin: 0;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .86;
+  letter-spacing: -.075em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.identity-heading h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  transition: width 1.5s var(--identity-ease) .8s;
+}
+
+.identity-section[data-visible="true"] .identity-heading h2::after {
+  width: 100%;
+}
+
+.heading-line {
+  position: relative;
+  display: block;
+  width: fit-content;
+  opacity: 0;
+  transform: translateX(-20px) translateY(55px) skewY(3deg);
+  transform-origin: left bottom;
+}
+
+.identity-section[data-visible="true"] .heading-line {
+  animation: identityHeadingLine 1.2s var(--identity-ease) forwards;
+}
+
+.identity-section[data-visible="true"] .heading-line:nth-child(2) {
+  animation-delay: .12s;
+}
+
+@keyframes identityHeadingLine {
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0) skewY(0);
+  }
+}
+
+.heading-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -.08em;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,.12), transparent 70%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.3s var(--identity-ease) .6s;
+}
+
+.identity-section[data-visible="true"] .heading-line::before {
+  transform: scaleX(1);
+}
+
+.heading-accent {
+  background: linear-gradient(110deg, #555, #f5f5f5 42%, #777 68%, #444);
+  background-size: 180% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: identityMetal 8s linear infinite;
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+.heading-accent:hover {
+  filter: drop-shadow(0 0 24px rgba(255,255,255,.06));
+}
+
+@keyframes identityMetal {
+  0% { background-position: 0% center; }
+  50% { background-position: 90% center; }
+  100% { background-position: 180% center; }
+}
+
+.identity-heading-line {
+  width: 0;
+  height: 1px;
+  margin-top: 38px;
+  background: linear-gradient(90deg, rgba(255,255,255,.5), transparent);
+  transition: width 1.3s var(--identity-ease) .35s;
+}
+
+.identity-section[data-visible="true"] .identity-heading-line {
+  width: min(420px, 45vw);
+}
+
+/* ============================================================================
+   LOWER INFORMATION
+   ============================================================================ */
+
+.identity-bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 100px;
+  align-items: end;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.identity-section[data-visible="true"] .identity-bottom {
+  animation: identityReveal 1s var(--identity-ease) .35s forwards;
+}
+
+.identity-statement {
+  position: relative;
+  max-width: 620px;
+}
+
+.identity-statement::before {
+  content: "ABOUT / 02";
+  display: block;
+  margin-bottom: 18px;
+  font-size: 7px;
+  line-height: 1;
+  letter-spacing: .2em;
+  color: rgba(255,255,255,.18);
+}
+
+.identity-statement::after {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(255,255,255,.18), transparent);
+}
+
+.identity-statement-index {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  font-size: 8px;
+  letter-spacing: .18em;
+  color: rgba(255,255,255,.25);
+}
+
+.identity-statement p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: -.015em;
+  color: rgba(255,255,255,.43);
+}
+
+.identity-statement p + p {
+  margin-top: 20px;
+  color: rgba(255,255,255,.25);
+}
+
+.identity-section[data-visible="true"] .identity-statement p {
+  animation: identityParagraphReveal .9s var(--identity-ease) .55s both;
+}
+
+.identity-section[data-visible="true"] .identity-statement p + p {
+  animation-delay: .67s;
+}
+
+@keyframes identityParagraphReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   STATUS READOUT
+   ============================================================================ */
+
+.identity-status {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.018);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 80px rgba(0,0,0,.18);
+}
+
+.identity-status::before {
+  content: "SYSTEM READOUT";
+  position: absolute;
+  left: 12px;
+  top: -18px;
+  font-size: 6px;
+  letter-spacing: .24em;
+  color: rgba(255,255,255,.16);
+}
+
+.identity-status::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.025) 50%, transparent 80%);
+  background-size: 220% 100%;
+  animation: identityStatusSweep 8s ease-in-out infinite;
+}
+
+@keyframes identityStatusSweep {
+  0%, 60% { background-position: 140% center; }
+  80% { background-position: -40% center; }
+  100% { background-position: -40% center; }
+}
+
+.identity-status > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 90px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.045);
+  background: rgba(5,5,5,.48);
+  transition:
+    background .35s ease,
+    transform .45s var(--identity-ease-soft),
+    border-color .35s ease,
+    box-shadow .35s ease;
+  overflow: hidden;
+}
+
+.identity-status > div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 1px;
+  background: rgba(255,255,255,.55);
+  transition: width .5s var(--identity-ease);
+}
+
+.identity-status > div::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 1px;
+  background: rgba(255,255,255,.55);
+  transition: width .5s var(--identity-ease);
+}
+
+.identity-status > div:hover {
+  background: rgba(255,255,255,.055);
+  border-color: rgba(255,255,255,.16);
+  transform: translateY(-4px) translateX(4px);
+  box-shadow: 0 14px 32px rgba(0,0,0,.2);
+}
+
+.identity-status > div:hover::before,
+.identity-status > div:hover::after {
+  width: 100%;
+}
+
+.identity-status > div:first-child::marker {
+  display: none;
+}
+
+.identity-status > div:first-child > span::before {
+  content: "●";
+  display: inline-block;
+  margin-right: 7px;
+  font-size: 5px;
+  vertical-align: middle;
+  color: rgba(255,255,255,.65);
+  animation: identityStatusPulse 2s ease-in-out infinite;
+}
+
+.identity-status span {
+  font-size: 7px;
+  line-height: 1.2;
+  letter-spacing: .2em;
+  color: rgba(255,255,255,.25);
+}
+
+.identity-status strong {
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.68);
+}
+
+/* ============================================================================
+   STATUS DATA MICRO EFFECTS
+   ============================================================================ */
+
+.identity-status > div:nth-child(1) {
+  animation: identityCellFloatOne 7s ease-in-out infinite;
+}
+
+.identity-status > div:nth-child(2) {
+  animation: identityCellFloatTwo 8s ease-in-out -2s infinite;
+}
+
+.identity-status > div:nth-child(3) {
+  animation: identityCellFloatThree 9s ease-in-out -4s infinite;
+}
+
+.identity-status > div:nth-child(4) {
+  animation: identityCellFloatFour 7.5s ease-in-out -1s infinite;
+}
+
+@keyframes identityCellFloatOne {
+  0%, 100% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(0,-1px,0); }
+}
+
+@keyframes identityCellFloatTwo {
+  0%, 100% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(0,1px,0); }
+}
+
+@keyframes identityCellFloatThree {
+  0%, 100% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(0,-1px,0); }
+}
+
+@keyframes identityCellFloatFour {
+  0%, 100% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(0,1px,0); }
+}
+
+/* ============================================================================
+   OPTIONAL FOOTER STACK
+   ============================================================================ */
+
+.identity-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: .18em;
+  color: rgba(255,255,255,.18);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.identity-footer span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.identity-footer i {
+  width: 3px;
+  height: 3px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(255,255,255,.25);
+}
+
+.identity-footer-arrow {
+  margin-left: auto;
+  color: rgba(255,255,255,.45);
+  animation: identityArrow 2s ease-in-out infinite;
+}
+
+@keyframes identityArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* ============================================================================
+   EDGE MARKERS
+   ============================================================================ */
+
+.identity-section .identity-edge-marker {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid rgba(255,255,255,.18);
+  border-left: 1px solid rgba(255,255,255,.18);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.identity-section .identity-edge-marker:nth-of-type(1) {
+  left: 16px;
+  top: 16px;
+}
+
+.identity-section .identity-edge-marker:nth-of-type(2) {
+  right: 16px;
+  top: 16px;
+  transform: rotate(90deg);
+}
+
+.identity-section .identity-edge-marker:nth-of-type(3) {
+  right: 16px;
+  bottom: 16px;
+  transform: rotate(180deg);
+}
+
+.identity-section .identity-edge-marker:nth-of-type(4) {
+  left: 16px;
+  bottom: 16px;
+  transform: rotate(270deg);
+}
+
+/* ============================================================================
+   ENTER STAGGER HELPERS
+   ============================================================================ */
+
+.identity-section[data-visible="true"] .identity-status > div {
+  animation-name: identityStatusEntry;
+  animation-duration: .8s;
+  animation-timing-function: var(--identity-ease);
+  animation-fill-mode: both;
+}
+
+.identity-section[data-visible="true"] .identity-status > div:nth-child(1) {
+  animation-delay: .52s;
+}
+
+.identity-section[data-visible="true"] .identity-status > div:nth-child(2) {
+  animation-delay: .6s;
+}
+
+.identity-section[data-visible="true"] .identity-status > div:nth-child(3) {
+  animation-delay: .68s;
+}
+
+.identity-section[data-visible="true"] .identity-status > div:nth-child(4) {
+  animation-delay: .76s;
+}
+
+@keyframes identityStatusEntry {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   FOCUS / ACCESSIBILITY
+   ============================================================================ */
+
+.identity-section :focus-visible {
+  outline: 1px solid rgba(255,255,255,.55);
+  outline-offset: 5px;
+}
+
+.identity-section button,
+.identity-section a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================================================
+   RESPONSIVE — LARGE DESKTOP
+   ============================================================================ */
+
+@media (min-width: 1500px) {
+  .identity-inner {
+    width: min(1500px, 88vw);
+  }
+  .identity-heading h2 {
+    font-size: clamp(7rem, 8vw, 11rem);
+  }
+  .identity-bottom {
+    gap: 120px;
+  }
+  .identity-statement {
+    max-width: 680px;
+  }
+}
+
+@media (min-width: 1900px) {
+  .identity-inner {
+    width: min(1620px, 84vw);
+  }
+  .identity-heading h2 {
+    font-size: 10rem;
+  }
+  .identity-grid {
+    background-size: 105px 105px;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE — TABLET
+   ============================================================================ */
+
+@media (max-width: 1100px) {
+  .identity-inner {
+    width: calc(100% - 64px);
+  }
+  .identity-bottom {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 60px;
+  }
+  .identity-heading {
+    margin-bottom: 60px;
+  }
+  .identity-heading h2 {
+    font-size: clamp(4rem, 10vw, 8rem);
+  }
+  .identity-telemetry-one {
+    left: 1%;
+  }
+  .identity-telemetry-two {
+    right: 1%;
+  }
+  .identity-telemetry-three {
+    right: 2%;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE — MOBILE LANDSCAPE / SMALL TABLET
+   ============================================================================ */
+
+@media (max-width: 900px) {
+  .identity-inner {
+    width: calc(100% - 48px);
+    padding: 32px 0 54px;
+  }
+  .identity-heading {
+    padding-top: 8vh;
+    margin-bottom: 50px;
+  }
+  .identity-heading h2 {
+    font-size: clamp(3.5rem, 14vw, 7rem);
+  }
+  .identity-bottom {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+  .identity-status {
+    width: 100%;
+  }
+  .identity-telemetry {
+    display: none;
+  }
+  .identity-atmosphere::after {
+    width: 110vw;
+    height: 110vw;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE — PHONE
+   ============================================================================ */
+
+@media (max-width: 600px) {
+  .identity-section {
+    min-height: 100svh;
+  }
+  .identity-inner {
+    width: calc(100% - 32px);
+    min-height: 100svh;
+    padding: 28px 0 72px;
+  }
+  .identity-label {
+    gap: 12px;
+    font-size: 8px;
+  }
+  .identity-label::before {
+    width: 18px;
+  }
+  .identity-heading {
+    padding-top: 7vh;
+    margin-bottom: 44px;
+  }
+  .identity-heading h2 {
+    font-size: clamp(3.2rem, 15vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.07em;
+  }
+  .identity-kicker {
+    font-size: 8px;
+    letter-spacing: .2em;
+  }
+  .identity-statement {
+    max-width: none;
+  }
+  .identity-statement p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .identity-status {
+    grid-template-columns: 1fr 1fr;
+  }
+  .identity-status > div {
+    min-height: 82px;
+    padding: 14px;
+  }
+  .identity-status strong {
+    font-size: 9px;
+  }
+  .identity-footer {
+    bottom: 20px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .identity-footer span:nth-of-type(n + 4),
+  .identity-footer i:nth-of-type(n + 4) {
+    display: none;
+  }
+  .identity-footer-arrow {
+    display: block !important;
+  }
+  .identity-grid {
+    background-size: 64px 64px;
+  }
+  .identity-particles {
+    background-size: 125px 125px, 90px 90px;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE — VERY SMALL PHONES
+   ============================================================================ */
+
+@media (max-width: 380px) {
+  .identity-inner {
+    width: calc(100% - 24px);
+    padding-top: 22px;
+  }
+  .identity-heading h2 {
+    font-size: clamp(2.8rem, 15vw, 4.5rem);
+  }
+  .identity-status > div {
+    min-height: 76px;
+    padding: 12px;
+  }
+  .identity-status span {
+    font-size: 6px;
+  }
+  .identity-status strong {
+    font-size: 8px;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .identity-section,
+  .identity-section *,
+  .identity-section::before,
+  .identity-section::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+  }
+  .identity-section .identity-grid,
+  .identity-section .identity-particles,
+  .identity-section .identity-scanline,
+  .identity-section .identity-atmosphere {
+    animation: none !important;
+  }
+}
+
+/* ============================================================================
+   PRINT
+   ============================================================================ */
+
+@media print {
+  .identity-section {
+    min-height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #000;
+  }
+  .identity-atmosphere,
+  .identity-grid,
+  .identity-particles,
+  .identity-scanline,
+  .identity-telemetry,
+  .identity-section::before,
+  .identity-section::after {
+    display: none;
+  }
+  .identity-inner {
+    width: 100%;
+    min-height: auto;
+    padding: 20px;
+  }
+  .identity-heading,
+  .identity-bottom,
+  .identity-label,
+  .heading-line {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .heading-accent {
+    color: #000;
+    background: none;
+    -webkit-text-fill-color: #000;
+  }
+}
+/* ============================================================================
+   MOTION TUNING PROFILE 001
+   ============================================================================ */
+.identity-section[data-identity-profile="1"] {
+  --identity-profile-index: 1;
+  --identity-profile-phase: 0.0333;
+  --identity-profile-strength: 0.703;
+}
+.identity-section[data-identity-profile="1"] .identity-atmosphere { animation-delay: -1s; }
+.identity-section[data-identity-profile="1"] .identity-grid { animation-delay: -1s; }
+.identity-section[data-identity-profile="1"] .identity-particles { animation-delay: -1s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 002
+   ============================================================================ */
+.identity-section[data-identity-profile="2"] {
+  --identity-profile-index: 2;
+  --identity-profile-phase: 0.0667;
+  --identity-profile-strength: 0.707;
+}
+.identity-section[data-identity-profile="2"] .identity-atmosphere { animation-delay: -2s; }
+.identity-section[data-identity-profile="2"] .identity-grid { animation-delay: -2s; }
+.identity-section[data-identity-profile="2"] .identity-particles { animation-delay: -2s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 003
+   ============================================================================ */
+.identity-section[data-identity-profile="3"] {
+  --identity-profile-index: 3;
+  --identity-profile-phase: 0.1000;
+  --identity-profile-strength: 0.710;
+}
+.identity-section[data-identity-profile="3"] .identity-atmosphere { animation-delay: -3s; }
+.identity-section[data-identity-profile="3"] .identity-grid { animation-delay: -3s; }
+.identity-section[data-identity-profile="3"] .identity-particles { animation-delay: -3s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 004
+   ============================================================================ */
+.identity-section[data-identity-profile="4"] {
+  --identity-profile-index: 4;
+  --identity-profile-phase: 0.1333;
+  --identity-profile-strength: 0.713;
+}
+.identity-section[data-identity-profile="4"] .identity-atmosphere { animation-delay: -4s; }
+.identity-section[data-identity-profile="4"] .identity-grid { animation-delay: -4s; }
+.identity-section[data-identity-profile="4"] .identity-particles { animation-delay: -4s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 005
+   ============================================================================ */
+.identity-section[data-identity-profile="5"] {
+  --identity-profile-index: 5;
+  --identity-profile-phase: 0.1667;
+  --identity-profile-strength: 0.717;
+}
+.identity-section[data-identity-profile="5"] .identity-atmosphere { animation-delay: -5s; }
+.identity-section[data-identity-profile="5"] .identity-grid { animation-delay: -5s; }
+.identity-section[data-identity-profile="5"] .identity-particles { animation-delay: -5s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 006
+   ============================================================================ */
+.identity-section[data-identity-profile="6"] {
+  --identity-profile-index: 6;
+  --identity-profile-phase: 0.2000;
+  --identity-profile-strength: 0.720;
+}
+.identity-section[data-identity-profile="6"] .identity-atmosphere { animation-delay: -6s; }
+.identity-section[data-identity-profile="6"] .identity-grid { animation-delay: -6s; }
+.identity-section[data-identity-profile="6"] .identity-particles { animation-delay: -6s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 007
+   ============================================================================ */
+.identity-section[data-identity-profile="7"] {
+  --identity-profile-index: 7;
+  --identity-profile-phase: 0.2333;
+  --identity-profile-strength: 0.723;
+}
+.identity-section[data-identity-profile="7"] .identity-atmosphere { animation-delay: -7s; }
+.identity-section[data-identity-profile="7"] .identity-grid { animation-delay: -7s; }
+.identity-section[data-identity-profile="7"] .identity-particles { animation-delay: -7s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 008
+   ============================================================================ */
+.identity-section[data-identity-profile="8"] {
+  --identity-profile-index: 8;
+  --identity-profile-phase: 0.2667;
+  --identity-profile-strength: 0.727;
+}
+.identity-section[data-identity-profile="8"] .identity-atmosphere { animation-delay: -8s; }
+.identity-section[data-identity-profile="8"] .identity-grid { animation-delay: -8s; }
+.identity-section[data-identity-profile="8"] .identity-particles { animation-delay: -8s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 009
+   ============================================================================ */
+.identity-section[data-identity-profile="9"] {
+  --identity-profile-index: 9;
+  --identity-profile-phase: 0.3000;
+  --identity-profile-strength: 0.730;
+}
+.identity-section[data-identity-profile="9"] .identity-atmosphere { animation-delay: -9s; }
+.identity-section[data-identity-profile="9"] .identity-grid { animation-delay: -9s; }
+.identity-section[data-identity-profile="9"] .identity-particles { animation-delay: -9s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 010
+   ============================================================================ */
+.identity-section[data-identity-profile="10"] {
+  --identity-profile-index: 10;
+  --identity-profile-phase: 0.3333;
+  --identity-profile-strength: 0.733;
+}
+.identity-section[data-identity-profile="10"] .identity-atmosphere { animation-delay: -10s; }
+.identity-section[data-identity-profile="10"] .identity-grid { animation-delay: -10s; }
+.identity-section[data-identity-profile="10"] .identity-particles { animation-delay: -10s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 011
+   ============================================================================ */
+.identity-section[data-identity-profile="11"] {
+  --identity-profile-index: 11;
+  --identity-profile-phase: 0.3667;
+  --identity-profile-strength: 0.737;
+}
+.identity-section[data-identity-profile="11"] .identity-atmosphere { animation-delay: -0s; }
+.identity-section[data-identity-profile="11"] .identity-grid { animation-delay: -11s; }
+.identity-section[data-identity-profile="11"] .identity-particles { animation-delay: -11s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 012
+   ============================================================================ */
+.identity-section[data-identity-profile="12"] {
+  --identity-profile-index: 12;
+  --identity-profile-phase: 0.4000;
+  --identity-profile-strength: 0.740;
+}
+.identity-section[data-identity-profile="12"] .identity-atmosphere { animation-delay: -1s; }
+.identity-section[data-identity-profile="12"] .identity-grid { animation-delay: -12s; }
+.identity-section[data-identity-profile="12"] .identity-particles { animation-delay: -12s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 013
+   ============================================================================ */
+.identity-section[data-identity-profile="13"] {
+  --identity-profile-index: 13;
+  --identity-profile-phase: 0.4333;
+  --identity-profile-strength: 0.743;
+}
+.identity-section[data-identity-profile="13"] .identity-atmosphere { animation-delay: -2s; }
+.identity-section[data-identity-profile="13"] .identity-grid { animation-delay: -13s; }
+.identity-section[data-identity-profile="13"] .identity-particles { animation-delay: -13s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 014
+   ============================================================================ */
+.identity-section[data-identity-profile="14"] {
+  --identity-profile-index: 14;
+  --identity-profile-phase: 0.4667;
+  --identity-profile-strength: 0.747;
+}
+.identity-section[data-identity-profile="14"] .identity-atmosphere { animation-delay: -3s; }
+.identity-section[data-identity-profile="14"] .identity-grid { animation-delay: -14s; }
+.identity-section[data-identity-profile="14"] .identity-particles { animation-delay: -14s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 015
+   ============================================================================ */
+.identity-section[data-identity-profile="15"] {
+  --identity-profile-index: 15;
+  --identity-profile-phase: 0.5000;
+  --identity-profile-strength: 0.750;
+}
+.identity-section[data-identity-profile="15"] .identity-atmosphere { animation-delay: -4s; }
+.identity-section[data-identity-profile="15"] .identity-grid { animation-delay: -15s; }
+.identity-section[data-identity-profile="15"] .identity-particles { animation-delay: -15s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 016
+   ============================================================================ */
+.identity-section[data-identity-profile="16"] {
+  --identity-profile-index: 16;
+  --identity-profile-phase: 0.5333;
+  --identity-profile-strength: 0.753;
+}
+.identity-section[data-identity-profile="16"] .identity-atmosphere { animation-delay: -5s; }
+.identity-section[data-identity-profile="16"] .identity-grid { animation-delay: -16s; }
+.identity-section[data-identity-profile="16"] .identity-particles { animation-delay: -16s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 017
+   ============================================================================ */
+.identity-section[data-identity-profile="17"] {
+  --identity-profile-index: 17;
+  --identity-profile-phase: 0.5667;
+  --identity-profile-strength: 0.757;
+}
+.identity-section[data-identity-profile="17"] .identity-atmosphere { animation-delay: -6s; }
+.identity-section[data-identity-profile="17"] .identity-grid { animation-delay: -0s; }
+.identity-section[data-identity-profile="17"] .identity-particles { animation-delay: -17s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 018
+   ============================================================================ */
+.identity-section[data-identity-profile="18"] {
+  --identity-profile-index: 18;
+  --identity-profile-phase: 0.6000;
+  --identity-profile-strength: 0.760;
+}
+.identity-section[data-identity-profile="18"] .identity-atmosphere { animation-delay: -7s; }
+.identity-section[data-identity-profile="18"] .identity-grid { animation-delay: -1s; }
+.identity-section[data-identity-profile="18"] .identity-particles { animation-delay: -18s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 019
+   ============================================================================ */
+.identity-section[data-identity-profile="19"] {
+  --identity-profile-index: 19;
+  --identity-profile-phase: 0.6333;
+  --identity-profile-strength: 0.763;
+}
+.identity-section[data-identity-profile="19"] .identity-atmosphere { animation-delay: -8s; }
+.identity-section[data-identity-profile="19"] .identity-grid { animation-delay: -2s; }
+.identity-section[data-identity-profile="19"] .identity-particles { animation-delay: -19s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 020
+   ============================================================================ */
+.identity-section[data-identity-profile="20"] {
+  --identity-profile-index: 20;
+  --identity-profile-phase: 0.6667;
+  --identity-profile-strength: 0.767;
+}
+.identity-section[data-identity-profile="20"] .identity-atmosphere { animation-delay: -9s; }
+.identity-section[data-identity-profile="20"] .identity-grid { animation-delay: -3s; }
+.identity-section[data-identity-profile="20"] .identity-particles { animation-delay: -20s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 021
+   ============================================================================ */
+.identity-section[data-identity-profile="21"] {
+  --identity-profile-index: 21;
+  --identity-profile-phase: 0.7000;
+  --identity-profile-strength: 0.770;
+}
+.identity-section[data-identity-profile="21"] .identity-atmosphere { animation-delay: -10s; }
+.identity-section[data-identity-profile="21"] .identity-grid { animation-delay: -4s; }
+.identity-section[data-identity-profile="21"] .identity-particles { animation-delay: -21s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 022
+   ============================================================================ */
+.identity-section[data-identity-profile="22"] {
+  --identity-profile-index: 22;
+  --identity-profile-phase: 0.7333;
+  --identity-profile-strength: 0.773;
+}
+.identity-section[data-identity-profile="22"] .identity-atmosphere { animation-delay: -0s; }
+.identity-section[data-identity-profile="22"] .identity-grid { animation-delay: -5s; }
+.identity-section[data-identity-profile="22"] .identity-particles { animation-delay: -22s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 023
+   ============================================================================ */
+.identity-section[data-identity-profile="23"] {
+  --identity-profile-index: 23;
+  --identity-profile-phase: 0.7667;
+  --identity-profile-strength: 0.777;
+}
+.identity-section[data-identity-profile="23"] .identity-atmosphere { animation-delay: -1s; }
+.identity-section[data-identity-profile="23"] .identity-grid { animation-delay: -6s; }
+.identity-section[data-identity-profile="23"] .identity-particles { animation-delay: -0s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 024
+   ============================================================================ */
+.identity-section[data-identity-profile="24"] {
+  --identity-profile-index: 24;
+  --identity-profile-phase: 0.8000;
+  --identity-profile-strength: 0.780;
+}
+.identity-section[data-identity-profile="24"] .identity-atmosphere { animation-delay: -2s; }
+.identity-section[data-identity-profile="24"] .identity-grid { animation-delay: -7s; }
+.identity-section[data-identity-profile="24"] .identity-particles { animation-delay: -1s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 025
+   ============================================================================ */
+.identity-section[data-identity-profile="25"] {
+  --identity-profile-index: 25;
+  --identity-profile-phase: 0.8333;
+  --identity-profile-strength: 0.783;
+}
+.identity-section[data-identity-profile="25"] .identity-atmosphere { animation-delay: -3s; }
+.identity-section[data-identity-profile="25"] .identity-grid { animation-delay: -8s; }
+.identity-section[data-identity-profile="25"] .identity-particles { animation-delay: -2s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 026
+   ============================================================================ */
+.identity-section[data-identity-profile="26"] {
+  --identity-profile-index: 26;
+  --identity-profile-phase: 0.8667;
+  --identity-profile-strength: 0.787;
+}
+.identity-section[data-identity-profile="26"] .identity-atmosphere { animation-delay: -4s; }
+.identity-section[data-identity-profile="26"] .identity-grid { animation-delay: -9s; }
+.identity-section[data-identity-profile="26"] .identity-particles { animation-delay: -3s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 027
+   ============================================================================ */
+.identity-section[data-identity-profile="27"] {
+  --identity-profile-index: 27;
+  --identity-profile-phase: 0.9000;
+  --identity-profile-strength: 0.790;
+}
+.identity-section[data-identity-profile="27"] .identity-atmosphere { animation-delay: -5s; }
+.identity-section[data-identity-profile="27"] .identity-grid { animation-delay: -10s; }
+.identity-section[data-identity-profile="27"] .identity-particles { animation-delay: -4s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 028
+   ============================================================================ */
+.identity-section[data-identity-profile="28"] {
+  --identity-profile-index: 28;
+  --identity-profile-phase: 0.9333;
+  --identity-profile-strength: 0.793;
+}
+.identity-section[data-identity-profile="28"] .identity-atmosphere { animation-delay: -6s; }
+.identity-section[data-identity-profile="28"] .identity-grid { animation-delay: -11s; }
+.identity-section[data-identity-profile="28"] .identity-particles { animation-delay: -5s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 029
+   ============================================================================ */
+.identity-section[data-identity-profile="29"] {
+  --identity-profile-index: 29;
+  --identity-profile-phase: 0.9667;
+  --identity-profile-strength: 0.797;
+}
+.identity-section[data-identity-profile="29"] .identity-atmosphere { animation-delay: -7s; }
+.identity-section[data-identity-profile="29"] .identity-grid { animation-delay: -12s; }
+.identity-section[data-identity-profile="29"] .identity-particles { animation-delay: -6s; }
+/* ============================================================================
+   MOTION TUNING PROFILE 030
+   ============================================================================ */
+.identity-section[data-identity-profile="30"] {
+  --identity-profile-index: 30;
+  --identity-profile-phase: 1.0000;
+  --identity-profile-strength: 0.800;
+}
+.identity-section[data-identity-profile="30"] .identity-atmosphere { animation-delay: -8s; }
+.identity-section[data-identity-profile="30"] .identity-grid { animation-delay: -13s; }
+.identity-section[data-identity-profile="30"] .identity-particles { animation-delay: -7s; }
+/* ============================================================================
+   EXTENSION HOOK 001
+   ============================================================================ */
+.identity-section .identity-hook-001 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-001::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-001:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 002
+   ============================================================================ */
+.identity-section .identity-hook-002 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-002::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-002:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 003
+   ============================================================================ */
+.identity-section .identity-hook-003 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-003::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-003:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 004
+   ============================================================================ */
+.identity-section .identity-hook-004 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-004::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-004:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 005
+   ============================================================================ */
+.identity-section .identity-hook-005 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-005::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-005:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 006
+   ============================================================================ */
+.identity-section .identity-hook-006 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-006::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-006:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 007
+   ============================================================================ */
+.identity-section .identity-hook-007 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-007::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-007:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 008
+   ============================================================================ */
+.identity-section .identity-hook-008 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-008::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-008:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 009
+   ============================================================================ */
+.identity-section .identity-hook-009 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-009::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-009:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 010
+   ============================================================================ */
+.identity-section .identity-hook-010 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-010::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-010:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 011
+   ============================================================================ */
+.identity-section .identity-hook-011 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-011::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-011:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 012
+   ============================================================================ */
+.identity-section .identity-hook-012 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-012::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-012:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 013
+   ============================================================================ */
+.identity-section .identity-hook-013 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-013::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-013:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 014
+   ============================================================================ */
+.identity-section .identity-hook-014 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-014::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-014:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 015
+   ============================================================================ */
+.identity-section .identity-hook-015 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-015::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-015:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 016
+   ============================================================================ */
+.identity-section .identity-hook-016 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-016::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-016:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 017
+   ============================================================================ */
+.identity-section .identity-hook-017 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-017::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-017:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 018
+   ============================================================================ */
+.identity-section .identity-hook-018 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-018::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-018:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 019
+   ============================================================================ */
+.identity-section .identity-hook-019 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-019::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-019:hover::before { opacity: 1; }
+/* ============================================================================
+   EXTENSION HOOK 020
+   ============================================================================ */
+.identity-section .identity-hook-020 {
+  position: relative;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  backface-visibility: hidden;
+}
+.identity-section .identity-hook-020::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.identity-section .identity-hook-020:hover::before { opacity: 1; }
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 001
+   ============================================================================ */
+.identity-section .identity-type-001 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 002
+   ============================================================================ */
+.identity-section .identity-type-002 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 003
+   ============================================================================ */
+.identity-section .identity-type-003 {
+  font-variation-settings: "wght" 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 004
+   ============================================================================ */
+.identity-section .identity-type-004 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 005
+   ============================================================================ */
+.identity-section .identity-type-005 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 006
+   ============================================================================ */
+.identity-section .identity-type-006 {
+  font-variation-settings: "wght" 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 007
+   ============================================================================ */
+.identity-section .identity-type-007 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 008
+   ============================================================================ */
+.identity-section .identity-type-008 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 009
+   ============================================================================ */
+.identity-section .identity-type-009 {
+  font-variation-settings: "wght" 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 010
+   ============================================================================ */
+.identity-section .identity-type-010 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 011
+   ============================================================================ */
+.identity-section .identity-type-011 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 012
+   ============================================================================ */
+.identity-section .identity-type-012 {
+  font-variation-settings: "wght" 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 013
+   ============================================================================ */
+.identity-section .identity-type-013 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 014
+   ============================================================================ */
+.identity-section .identity-type-014 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 015
+   ============================================================================ */
+.identity-section .identity-type-015 {
+  font-variation-settings: "wght" 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 016
+   ============================================================================ */
+.identity-section .identity-type-016 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 017
+   ============================================================================ */
+.identity-section .identity-type-017 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 018
+   ============================================================================ */
+.identity-section .identity-type-018 {
+  font-variation-settings: "wght" 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 019
+   ============================================================================ */
+.identity-section .identity-type-019 {
+  font-variation-settings: "wght" 450;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   TYPE / LAYOUT TOKEN 020
+   ============================================================================ */
+.identity-section .identity-type-020 {
+  font-variation-settings: "wght" 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* ============================================================================
+   FUTURE STATE 001
+   ============================================================================ */
+.identity-section[data-identity-state="state-001"] .identity-label {
+  --identity-state-opacity: 0.63;
+}
+.identity-section[data-identity-state="state-001"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 002
+   ============================================================================ */
+.identity-section[data-identity-state="state-002"] .identity-label {
+  --identity-state-opacity: 0.71;
+}
+.identity-section[data-identity-state="state-002"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 003
+   ============================================================================ */
+.identity-section[data-identity-state="state-003"] .identity-label {
+  --identity-state-opacity: 0.79;
+}
+.identity-section[data-identity-state="state-003"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 004
+   ============================================================================ */
+.identity-section[data-identity-state="state-004"] .identity-label {
+  --identity-state-opacity: 0.87;
+}
+.identity-section[data-identity-state="state-004"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 005
+   ============================================================================ */
+.identity-section[data-identity-state="state-005"] .identity-label {
+  --identity-state-opacity: 0.55;
+}
+.identity-section[data-identity-state="state-005"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 006
+   ============================================================================ */
+.identity-section[data-identity-state="state-006"] .identity-label {
+  --identity-state-opacity: 0.63;
+}
+.identity-section[data-identity-state="state-006"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 007
+   ============================================================================ */
+.identity-section[data-identity-state="state-007"] .identity-label {
+  --identity-state-opacity: 0.71;
+}
+.identity-section[data-identity-state="state-007"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 008
+   ============================================================================ */
+.identity-section[data-identity-state="state-008"] .identity-label {
+  --identity-state-opacity: 0.79;
+}
+.identity-section[data-identity-state="state-008"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 009
+   ============================================================================ */
+.identity-section[data-identity-state="state-009"] .identity-label {
+  --identity-state-opacity: 0.87;
+}
+.identity-section[data-identity-state="state-009"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 010
+   ============================================================================ */
+.identity-section[data-identity-state="state-010"] .identity-label {
+  --identity-state-opacity: 0.55;
+}
+.identity-section[data-identity-state="state-010"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 011
+   ============================================================================ */
+.identity-section[data-identity-state="state-011"] .identity-label {
+  --identity-state-opacity: 0.63;
+}
+.identity-section[data-identity-state="state-011"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 012
+   ============================================================================ */
+.identity-section[data-identity-state="state-012"] .identity-label {
+  --identity-state-opacity: 0.71;
+}
+.identity-section[data-identity-state="state-012"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 013
+   ============================================================================ */
+.identity-section[data-identity-state="state-013"] .identity-label {
+  --identity-state-opacity: 0.79;
+}
+.identity-section[data-identity-state="state-013"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 014
+   ============================================================================ */
+.identity-section[data-identity-state="state-014"] .identity-label {
+  --identity-state-opacity: 0.87;
+}
+.identity-section[data-identity-state="state-014"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 015
+   ============================================================================ */
+.identity-section[data-identity-state="state-015"] .identity-label {
+  --identity-state-opacity: 0.55;
+}
+.identity-section[data-identity-state="state-015"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 016
+   ============================================================================ */
+.identity-section[data-identity-state="state-016"] .identity-label {
+  --identity-state-opacity: 0.63;
+}
+.identity-section[data-identity-state="state-016"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 017
+   ============================================================================ */
+.identity-section[data-identity-state="state-017"] .identity-label {
+  --identity-state-opacity: 0.71;
+}
+.identity-section[data-identity-state="state-017"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 018
+   ============================================================================ */
+.identity-section[data-identity-state="state-018"] .identity-label {
+  --identity-state-opacity: 0.79;
+}
+.identity-section[data-identity-state="state-018"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 019
+   ============================================================================ */
+.identity-section[data-identity-state="state-019"] .identity-label {
+  --identity-state-opacity: 0.87;
+}
+.identity-section[data-identity-state="state-019"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 020
+   ============================================================================ */
+.identity-section[data-identity-state="state-020"] .identity-label {
+  --identity-state-opacity: 0.55;
+}
+.identity-section[data-identity-state="state-020"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 021
+   ============================================================================ */
+.identity-section[data-identity-state="state-021"] .identity-label {
+  --identity-state-opacity: 0.63;
+}
+.identity-section[data-identity-state="state-021"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 022
+   ============================================================================ */
+.identity-section[data-identity-state="state-022"] .identity-label {
+  --identity-state-opacity: 0.71;
+}
+.identity-section[data-identity-state="state-022"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 023
+   ============================================================================ */
+.identity-section[data-identity-state="state-023"] .identity-label {
+  --identity-state-opacity: 0.79;
+}
+.identity-section[data-identity-state="state-023"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 024
+   ============================================================================ */
+.identity-section[data-identity-state="state-024"] .identity-label {
+  --identity-state-opacity: 0.87;
+}
+.identity-section[data-identity-state="state-024"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 025
+   ============================================================================ */
+.identity-section[data-identity-state="state-025"] .identity-label {
+  --identity-state-opacity: 0.55;
+}
+.identity-section[data-identity-state="state-025"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 026
+   ============================================================================ */
+.identity-section[data-identity-state="state-026"] .identity-label {
+  --identity-state-opacity: 0.63;
+}
+.identity-section[data-identity-state="state-026"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 027
+   ============================================================================ */
+.identity-section[data-identity-state="state-027"] .identity-label {
+  --identity-state-opacity: 0.71;
+}
+.identity-section[data-identity-state="state-027"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 028
+   ============================================================================ */
+.identity-section[data-identity-state="state-028"] .identity-label {
+  --identity-state-opacity: 0.79;
+}
+.identity-section[data-identity-state="state-028"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 029
+   ============================================================================ */
+.identity-section[data-identity-state="state-029"] .identity-label {
+  --identity-state-opacity: 0.87;
+}
+.identity-section[data-identity-state="state-029"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   FUTURE STATE 030
+   ============================================================================ */
+.identity-section[data-identity-state="state-030"] .identity-label {
+  --identity-state-opacity: 0.55;
+}
+.identity-section[data-identity-state="state-030"] .identity-label span:first-child {
+  opacity: var(--identity-state-opacity);
+}
+/* ============================================================================
+   STAGGER SLOT 01
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-01 {
+  animation-delay: 0.05s;
+}
+.identity-section .identity-stagger-01 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 02
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-02 {
+  animation-delay: 0.10s;
+}
+.identity-section .identity-stagger-02 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 03
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-03 {
+  animation-delay: 0.15s;
+}
+.identity-section .identity-stagger-03 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 04
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-04 {
+  animation-delay: 0.20s;
+}
+.identity-section .identity-stagger-04 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 05
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-05 {
+  animation-delay: 0.25s;
+}
+.identity-section .identity-stagger-05 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 06
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-06 {
+  animation-delay: 0.30s;
+}
+.identity-section .identity-stagger-06 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 07
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-07 {
+  animation-delay: 0.35s;
+}
+.identity-section .identity-stagger-07 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 08
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-08 {
+  animation-delay: 0.40s;
+}
+.identity-section .identity-stagger-08 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 09
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-09 {
+  animation-delay: 0.45s;
+}
+.identity-section .identity-stagger-09 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 10
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-10 {
+  animation-delay: 0.50s;
+}
+.identity-section .identity-stagger-10 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 11
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-11 {
+  animation-delay: 0.55s;
+}
+.identity-section .identity-stagger-11 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 12
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-12 {
+  animation-delay: 0.60s;
+}
+.identity-section .identity-stagger-12 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 13
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-13 {
+  animation-delay: 0.65s;
+}
+.identity-section .identity-stagger-13 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 14
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-14 {
+  animation-delay: 0.70s;
+}
+.identity-section .identity-stagger-14 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 15
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-15 {
+  animation-delay: 0.75s;
+}
+.identity-section .identity-stagger-15 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 16
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-16 {
+  animation-delay: 0.80s;
+}
+.identity-section .identity-stagger-16 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 17
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-17 {
+  animation-delay: 0.85s;
+}
+.identity-section .identity-stagger-17 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 18
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-18 {
+  animation-delay: 0.90s;
+}
+.identity-section .identity-stagger-18 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 19
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-19 {
+  animation-delay: 0.95s;
+}
+.identity-section .identity-stagger-19 {
+  will-change: transform, opacity;
+}
+/* ============================================================================
+   STAGGER SLOT 20
+   ============================================================================ */
+.identity-section[data-visible="true"] .identity-stagger-20 {
+  animation-delay: 1.00s;
+}
+.identity-section .identity-stagger-20 {
+  will-change: transform, opacity;
+}

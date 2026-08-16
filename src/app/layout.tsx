@@ -5,9 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { basehub } from "basehub";
 
 import { Providers } from "./providers";
-import { Header } from "./_components/header";
-import { Footer } from "./_components/footer";
-import { Newsletter } from "./_sections/newsletter";
+import { PortfolioHeader } from "./_components/header/PortfolioHeader";
 import { draftMode } from "next/headers";
 
 const geist = Geist({
@@ -111,11 +109,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`min-h-svh max-w-[100vw] bg-surface-primary text-text-primary dark:bg-dark-surface-primary dark:text-dark-text-primary ${geistMono.variable} ${geist.variable} font-sans`}
       >
         <Providers>
-          <Header />
-          <main className="min-h-[calc(100svh-var(--header-height))]">{children}</main>
-          <Newsletter />
-          <Footer />
-        </Providers>
+  <PortfolioHeader />
+  <main className="min-h-[calc(100svh-var(--header-height))]">
+    {children}
+  </main>
+</Providers>
       </body>
     </html>
   );
