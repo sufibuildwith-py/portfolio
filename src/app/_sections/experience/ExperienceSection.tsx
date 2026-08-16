@@ -537,8 +537,7 @@ export function ExperienceSection() {
   });
 
   const activeExperience =
-    experiences[activeIndex];
-
+  experiences[activeIndex]!;
   const currentYear = useMemo(
     () => new Date().getFullYear(),
     [],
@@ -550,8 +549,10 @@ export function ExperienceSection() {
     if (!section) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+  ([entry]) => {
+    if (!entry) return;
+
+    if (entry.isIntersecting) {
           setVisible(true);
         }
       },
@@ -668,15 +669,17 @@ export function ExperienceSection() {
 
           if (!visibleCards.length) return;
 
-          const index =
-            cards.indexOf(
-              visibleCards[0]
-                .target as HTMLElement,
-            );
+          const target = visibleCards[0]?.target;
 
-          if (index >= 0) {
-            setActiveIndex(index);
-          }
+if (!target) return;
+
+const index = cards.indexOf(
+  target as HTMLElement,
+);
+
+if (index >= 0) {
+  setActiveIndex(index);
+}
         },
         {
           threshold: [

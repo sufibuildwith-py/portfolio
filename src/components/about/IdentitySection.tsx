@@ -55,15 +55,17 @@ export function IdentitySection() {
     };
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        section.dataset.visible = entry.isIntersecting
-          ? "true"
-          : "false";
-      },
-      {
-        threshold: 0.18,
-      }
-    );
+  ([entry]) => {
+    if (!entry) return;
+
+    section.dataset.visible = entry.isIntersecting
+      ? "true"
+      : "false";
+  },
+  {
+    threshold: 0.18,
+  }
+);
 
     observer.observe(section);
 

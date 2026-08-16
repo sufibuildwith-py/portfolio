@@ -81,6 +81,7 @@ export function CapabilitiesSection() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        if (!entry) return;
         section.dataset.visible = entry.isIntersecting
           ? "true"
           : "false";

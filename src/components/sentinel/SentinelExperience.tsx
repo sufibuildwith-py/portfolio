@@ -93,7 +93,7 @@ export function SentinelExperience() {
   );
 
   const current = stages[activeStage];
-
+if (!current) return null;
   return (
     <section
       ref={sectionRef}

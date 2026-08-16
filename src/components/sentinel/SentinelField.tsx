@@ -247,6 +247,7 @@ export function SentinelField({
         i++
       ) {
         const node = nodes[i];
+if (!node) continue;
 
         /*
          * Progress causes the network
@@ -368,17 +369,15 @@ export function SentinelField({
             positions.length;
           j++
         ) {
-          const a =
-            positions[i];
+          const a = positions[i];
+const b = positions[j];
 
-          const b =
-            positions[j];
+if (!a || !b) continue;
 
-          const distance =
-            Math.hypot(
-              a.x - b.x,
-              a.y - b.y
-            );
+const distance = Math.hypot(
+  a.x - b.x,
+  a.y - b.y
+);
 
           if (
             distance >

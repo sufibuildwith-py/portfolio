@@ -182,8 +182,7 @@ export function ProjectsSection() {
   const pointerFrame = useRef<number | null>(null);
   const pointerTarget = useRef<HTMLElement | null>(null);
 
-  const active = projects[activeProject];
-
+ const active = projects[activeProject]!;
   /*
    * SECTION VISIBILITY
    */
@@ -194,7 +193,9 @@ export function ProjectsSection() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+  if (!entry) return;
+
+  if (entry.isIntersecting) {
           setVisible(true);
         }
       },

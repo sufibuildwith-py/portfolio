@@ -62,7 +62,7 @@ export function IncidentStage({
   );
 
   const current = stages[stage];
-
+if (!current) return null;
   return (
     <div className="incident-stage">
 
