@@ -258,9 +258,10 @@ const localProgress =
 
   return (
     <main
-      ref={sectionRef}
-      className="guidein-experience"
-    >
+  id="guidein"
+  ref={sectionRef}
+  className="guidein-experience"
+>
       <div className="guidein-sticky">
         <div className="guidein-noise" />
 

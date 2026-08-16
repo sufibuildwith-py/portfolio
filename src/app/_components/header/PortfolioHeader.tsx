@@ -6,10 +6,14 @@ import "./portfolio-header.css";
 const sections = [
   { id: "home", number: "01", label: "HOME" },
   { id: "about", number: "02", label: "ABOUT" },
-  { id: "capabilities", number: "03", label: "CAPABILITIES" },
-  { id: "projects", number: "04", label: "PROJECTS" },
-  { id: "experience", number: "05", label: "EXPERIENCE" },
-  { id: "contact", number: "06", label: "CONTACT" },
+  { id: "projects", number: "03", label: "PROJECTS" },
+  { id: "sentinel", number: "04", label: "SENTINEL" },
+  { id: "guidein", number: "05", label: "GUIDEIN" },
+  { id: "ocr", number: "06", label: "OCR" },
+  { id: "experience", number: "07", label: "EXPERIENCE" },
+  { id: "education", number: "08", label: "EDUCATION" },
+  { id: "certifications", number: "09", label: "CERTIFICATIONS" },
+  { id: "contact", number: "10", label: "CONTACT" },
 ];
 
 export function PortfolioHeader() {
@@ -18,43 +22,58 @@ export function PortfolioHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+  const handleScroll = () => {
+    const scrollY = window.scrollY;
 
-      const viewportPoint = window.innerHeight * 0.32;
-      let current = "home";
+    setScrolled(scrollY > 20);
 
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
+    // Use a point slightly below the fixed header.
+    const viewportPoint = window.innerHeight * 0.28;
 
-        if (!element) {
-          continue;
-        }
+    let current = "home";
+    let closestDistance = Infinity;
 
-        const rect = element.getBoundingClientRect();
+    for (const section of sections) {
+      const element = document.getElementById(section.id);
 
-        if (rect.top <= viewportPoint && rect.bottom >= viewportPoint) {
-          current = section.id;
-          break;
-        }
+      if (!element) continue;
+
+      const rect = element.getBoundingClientRect();
+
+      // Section currently crosses our detection line.
+      if (
+        rect.top <= viewportPoint &&
+        rect.bottom >= viewportPoint
+      ) {
+        current = section.id;
+        break;
       }
 
-      setActiveSection(current);
-    };
+      // Fallback: find the section closest to the detection point.
+      const distance = Math.abs(rect.top - viewportPoint);
 
-    handleScroll();
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        current = section.id;
+      }
+    }
 
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
+    setActiveSection(current);
+  };
 
-    window.addEventListener("resize", handleScroll);
+  handleScroll();
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, []);
+  window.addEventListener("scroll", handleScroll, {
+    passive: true,
+  });
+
+  window.addEventListener("resize", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+    window.removeEventListener("resize", handleScroll);
+  };
+}, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -65,26 +84,24 @@ export function PortfolioHeader() {
   }, [mobileOpen]);
 
   const handleNavigation = (id: string) => {
-    setMobileOpen(false);
+  setMobileOpen(false);
 
-    const target = document.getElementById(id);
+  const target = document.getElementById(id);
 
-    if (!target) {
-      return;
-    }
+  if (!target) return;
 
-    const headerOffset = 70;
+  const headerOffset = 90;
 
-    const targetPosition =
-      target.getBoundingClientRect().top +
-      window.scrollY -
-      headerOffset;
+  const targetPosition =
+    target.getBoundingClientRect().top +
+    window.scrollY -
+    headerOffset;
 
-    window.scrollTo({
-      top: targetPosition,
-      behavior: "smooth",
-    });
-  };
+  window.scrollTo({
+    top: Math.max(0, targetPosition),
+    behavior: "smooth",
+  });
+};
 
   return (
     <header
@@ -109,7 +126,7 @@ export function PortfolioHeader() {
 
           <span className="portfolio-brand-name">KHAN</span>
 
-          <span className="portfolio-brand-mark">/AI</span>
+          <span className="portfolio-brand-mark">/BTECH FINAL YEAR</span>
         </button>
 
         <nav

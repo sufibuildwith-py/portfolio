@@ -49,7 +49,11 @@ export function CinematicHero() {
   }, []);
 
   return (
-    <section ref={heroRef} className="cinematic-hero">
+    <section
+  ref={heroRef}
+  id="home"
+  className="cinematic-hero"
+>
       <InteractiveField />
 
       <div className="hero-light" />

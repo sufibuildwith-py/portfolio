@@ -873,7 +873,8 @@ export default function EducationExperience() {
 
   return (
     <section
-      ref={sectionRef}
+  id="education"
+  ref={sectionRef}
       className={`education-experience education-phase-${phase}`}
     >
       <div className="education-sticky">

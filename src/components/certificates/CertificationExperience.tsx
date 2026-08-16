@@ -1,13 +1,6 @@
 "use client";
+
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ArrowUpRight,
-  Award,
-  ExternalLink,
-  ShieldCheck,
-  Sparkles,
-  Terminal,
-} from "lucide-react";
 
 import "./Certification.css";
 
@@ -87,14 +80,20 @@ const certifications: Certification[] = [
     featured: true,
   },
   {
-    id: "forage",
+    id: "deloitte",
     index: "06",
     issuer: "DELOITTE",
-    title: "Data	Analytics	Job	Simulation",
-    category: "PRACTICAL EXPERIENCE WITH DATA ANALYTICS",
+    title: "Data Analytics Job Simulation",
+    category: "DATA ANALYTICS",
     description:
       "A hands-on industry simulation designed around practical technical problem solving and professional workflows.",
-    skills: ["Problem Solving", "Data Analytics", "Professional Workflows", "Dashboards", "Data Visualization"],
+    skills: [
+      "Problem Solving",
+      "Data Analytics",
+      "Professional Workflows",
+      "Dashboards",
+      "Data Visualization",
+    ],
     credentialUrl:
       "https://www.theforage.com/completion-certificates/9PBTqmSxAf6zZTseP/io9DzWKe3PTsiS6GG_9PBTqmSxAf6zZTseP_6a296e964de3917a921d35a5_1781102013510_completion_certificate.pdf",
   },
@@ -112,7 +111,7 @@ export default function Certifications() {
 
   useEffect(() => {
     const updateScroll = () => {
-      if (rafRef.current) {
+      if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
 
@@ -131,9 +130,7 @@ export default function Certifications() {
 
         const index = Math.min(
           certifications.length - 1,
-          Math.floor(
-            nextProgress * certifications.length
-          )
+          Math.floor(nextProgress * certifications.length)
         );
 
         setActiveIndex(index);
@@ -152,19 +149,13 @@ export default function Certifications() {
       window.removeEventListener("scroll", updateScroll);
       window.removeEventListener("resize", updateScroll);
 
-      if (rafRef.current) {
+      if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
     };
   }, []);
 
-  const activeCertification = certifications.find(
-  (certification) => Number(certification.index) === activeIndex
-);
-
-if (!activeCertification) {
-  return null;
-}
+  const activeCertification = certifications[activeIndex]!;
 
   const scrollToCredential = (index: number) => {
     if (!sectionRef.current) return;
@@ -178,26 +169,23 @@ if (!activeCertification) {
       window.innerHeight;
 
     const targetProgress =
-      index /
-      Math.max(certifications.length - 1, 1);
+      index / Math.max(certifications.length - 1, 1);
 
     window.scrollTo({
-      top:
-        sectionTop +
-        scrollable * targetProgress,
+      top: sectionTop + scrollable * targetProgress,
       behavior: "smooth",
     });
   };
 
   return (
     <section
-      ref={sectionRef}
-      className="certifications-experience"
-    >
+  id="certifications"
+  ref={sectionRef}
+  className="certifications-experience"
+>
       <div className="certifications-sticky">
-        {/* =====================================================
-            BACKGROUND
-           ===================================================== */}
+
+        {/* BACKGROUND */}
 
         <div className="certifications-background">
           <div className="certifications-grid" />
@@ -214,9 +202,7 @@ if (!activeCertification) {
           />
         </div>
 
-        {/* =====================================================
-            HEADER
-           ===================================================== */}
+        {/* HEADER */}
 
         <header className="certifications-header">
           <div className="certifications-brand">
@@ -230,19 +216,22 @@ if (!activeCertification) {
           </div>
 
           <div className="certifications-index">
-            <span>0{activeIndex + 1}</span>
-            /0{certifications.length}
+            <span>
+              {String(activeIndex + 1).padStart(2, "0")}
+            </span>
+            /
+            {String(certifications.length).padStart(2, "0")}
           </div>
         </header>
 
-        {/* =====================================================
-            SIDE MARKERS
-           ===================================================== */}
+        {/* SIDE MARKERS */}
 
         <div className="certifications-side-marker certifications-side-marker-left">
           <span>KNOWLEDGE SYSTEM</span>
           <i />
-          <strong>06 CREDENTIALS</strong>
+          <strong>
+            {String(certifications.length).padStart(2, "0")} CREDENTIALS
+          </strong>
         </div>
 
         <div className="certifications-side-marker certifications-side-marker-right">
@@ -251,19 +240,20 @@ if (!activeCertification) {
           <span>VALIDATE</span>
         </div>
 
-        {/* =====================================================
-            MAIN CONTENT
-           ===================================================== */}
+        {/* MAIN CONTENT */}
 
         <main className="certifications-main">
-          {/* ===================================================
-              LEFT COPY
-             =================================================== */}
+
+          {/* LEFT COPY */}
 
           <div className="certifications-copy">
             <div className="certifications-stage-meta">
-              <span>06</span>
+              <span>
+                {String(certifications.length).padStart(2, "0")}
+              </span>
+
               <i />
+
               <span>VERIFIED CREDENTIALS</span>
             </div>
 
@@ -286,9 +276,7 @@ if (!activeCertification) {
             </p>
 
             <div className="certifications-active-info">
-              <span>
-                CURRENT CREDENTIAL
-              </span>
+              <span>CURRENT CREDENTIAL</span>
 
               <strong>
                 {activeCertification.title}
@@ -300,9 +288,7 @@ if (!activeCertification) {
             </div>
           </div>
 
-          {/* ===================================================
-              CENTER SYSTEM
-             =================================================== */}
+          {/* CENTER SYSTEM */}
 
           <div className="certifications-visual">
             <div className="certifications-orbit-system">
@@ -314,52 +300,40 @@ if (!activeCertification) {
               <div className="certifications-crosshair certifications-crosshair-one" />
               <div className="certifications-crosshair certifications-crosshair-two" />
 
-              {certifications.map(
-                (certification, index) => {
-                  const angle =
-                    (index / certifications.length) *
-                    360;
+              {certifications.map((certification, index) => {
+                const angle =
+                  (index / certifications.length) * 360;
 
-                  const isActive =
-                    index === activeIndex;
+                const isActive = index === activeIndex;
 
-                  const distance =
-                    index === activeIndex
-                      ? 0
-                      : Math.abs(
-                          index - activeIndex
-                        );
+                const distance =
+                  Math.abs(index - activeIndex);
 
-                  return (
-                    <button
-                      key={certification.id}
-                      className={`certifications-node ${
-                        isActive ? "active" : ""
-                      }`}
-                      style={{
-                        transform: `
-                          rotate(${angle}deg)
-                          translateY(-210px)
-                          rotate(-${angle}deg)
-                          scale(${isActive ? 1.08 : 0.92})
-                        `,
-                        opacity:
-                          distance > 2 ? 0.25 : 1,
-                      }}
-                      onClick={() =>
-                        scrollToCredential(index)
-                      }
-                      aria-label={`View ${certification.title}`}
-                    >
-                      <i />
-
-                      <span>
-                        {certification.index}
-                      </span>
-                    </button>
-                  );
-                }
-              )}
+                return (
+                  <button
+                    key={certification.id}
+                    className={`certifications-node ${
+                      isActive ? "active" : ""
+                    }`}
+                    style={{
+                      transform: `
+                        rotate(${angle}deg)
+                        translateY(-210px)
+                        rotate(-${angle}deg)
+                        scale(${isActive ? 1.08 : 0.92})
+                      `,
+                      opacity: distance > 2 ? 0.25 : 1,
+                    }}
+                    onClick={() =>
+                      scrollToCredential(index)
+                    }
+                    aria-label={`View ${certification.title}`}
+                  >
+                    <i />
+                    <span>{certification.index}</span>
+                  </button>
+                );
+              })}
 
               {/* CORE */}
 
@@ -373,15 +347,10 @@ if (!activeCertification) {
                   <span>VERIFIED</span>
 
                   <strong>
-                    {String(activeIndex + 1).padStart(
-                      2,
-                      "0"
-                    )}
+                    {String(activeIndex + 1).padStart(2, "0")}
                   </strong>
 
-                  <small>
-                    CREDENTIAL
-                  </small>
+                  <small>CREDENTIAL</small>
                 </div>
               </div>
 
@@ -403,13 +372,13 @@ if (!activeCertification) {
             </div>
           </div>
 
-          {/* ===================================================
-              RIGHT DATA PANEL
-             =================================================== */}
+          {/* RIGHT DATA PANEL */}
 
           <aside className="certifications-data">
+
             <div>
               <span>ISSUER</span>
+
               <strong>
                 {activeCertification.issuer}
               </strong>
@@ -417,6 +386,7 @@ if (!activeCertification) {
 
             <div>
               <span>DOMAIN</span>
+
               <strong>
                 {activeCertification.category}
               </strong>
@@ -448,19 +418,20 @@ if (!activeCertification) {
               VIEW CREDENTIAL
               <span>↗</span>
             </a>
+
           </aside>
         </main>
 
-        {/* =====================================================
-            ACTIVE CERTIFICATE DETAIL
-           ===================================================== */}
+        {/* ACTIVE CERTIFICATE DETAIL */}
 
         <div className="certifications-detail">
+
           <div className="certifications-detail-number">
             {activeCertification.index}
           </div>
 
           <div className="certifications-detail-copy">
+
             <span>
               {activeCertification.category}
             </span>
@@ -474,14 +445,13 @@ if (!activeCertification) {
             </p>
 
             <div className="certifications-skills">
-              {activeCertification.skills.map(
-                (skill) => (
-                  <span key={skill}>
-                    {skill}
-                  </span>
-                )
-              )}
+              {activeCertification.skills.map((skill) => (
+                <span key={skill}>
+                  {skill}
+                </span>
+              ))}
             </div>
+
           </div>
 
           <a
@@ -493,43 +463,38 @@ if (!activeCertification) {
             <span>OPEN</span>
             <strong>CREDENTIAL ↗</strong>
           </a>
+
         </div>
 
-        {/* =====================================================
-            SIGNAL
-           ===================================================== */}
+        {/* SIGNAL */}
 
         <div className="certifications-signal">
+
           <span>KNOWLEDGE INDEX</span>
 
           <strong>
-            {String(
-              Math.round(progress * 100)
-            ).padStart(3, "0")}
-            %
+            {String(Math.round(progress * 100)).padStart(3, "0")}%
           </strong>
 
           <div>
-            {certifications.map(
-              (_, index) => (
-                <i
-                  key={index}
-                  className={
-                    index <= activeIndex
-                      ? "active"
-                      : ""
-                  }
-                />
-              )
-            )}
+            {certifications.map((_, index) => (
+              <i
+                key={index}
+                className={
+                  index <= activeIndex
+                    ? "active"
+                    : ""
+                }
+              />
+            ))}
           </div>
+
         </div>
 
-        {/* =====================================================
-            TIMELINE
-           ===================================================== */}
+        {/* TIMELINE */}
 
         <div className="certifications-timeline">
+
           <div className="certifications-timeline-track">
             <i
               style={{
@@ -538,40 +503,37 @@ if (!activeCertification) {
             />
           </div>
 
-          {certifications.map(
-            (certification, index) => (
-              <button
-                key={certification.id}
-                className={`certifications-timeline-node ${
-                  index === activeIndex
-                    ? "active"
-                    : ""
-                }`}
-                style={{
-                  left: `${
-                    (index /
-                      (certifications.length - 1)) *
-                    100
-                  }%`,
-                }}
-                onClick={() =>
-                  scrollToCredential(index)
-                }
-              >
-                <span />
-                <strong>
-                  {certification.index}
-                </strong>
-              </button>
-            )
-          )}
+          {certifications.map((certification, index) => (
+            <button
+              key={certification.id}
+              className={`certifications-timeline-node ${
+                index === activeIndex ? "active" : ""
+              }`}
+              style={{
+                left: `${
+                  (index /
+                    Math.max(certifications.length - 1, 1)) *
+                  100
+                }%`,
+              }}
+              onClick={() =>
+                scrollToCredential(index)
+              }
+              aria-label={`Jump to ${certification.title}`}
+            >
+              <span />
+              <strong>
+                {certification.index}
+              </strong>
+            </button>
+          ))}
+
         </div>
 
-        {/* =====================================================
-            FOOTER
-           ===================================================== */}
+        {/* FOOTER */}
 
         <footer className="certifications-footer">
+
           <span>
             SUFIYAN KHAN / PORTFOLIO
           </span>
@@ -583,7 +545,9 @@ if (!activeCertification) {
           <span>
             LEARN → BUILD → VALIDATE
           </span>
+
         </footer>
+
       </div>
 
       <div className="certifications-scroll-space" />

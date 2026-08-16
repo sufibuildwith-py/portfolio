@@ -570,9 +570,10 @@ export function OCRExperience() {
 
   return (
     <section
-      ref={sectionRef}
-      className="ocr-experience"
-    >
+  id="ocr"
+  ref={sectionRef}
+  className="ocr-experience"
+>
       <div className="ocr-sticky">
         <div className="ocr-background">
           <div className="ocr-grid" />

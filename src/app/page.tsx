@@ -10,6 +10,7 @@ import GuideInExperience from "@/components/guidein/GuideInExperience";
 import OCRExperience from "@/components/ocr/OCRExperience";
 import EducationExperience from "@/components/education/EducationExperience";
 import CertificationExperience from "@/components/certificates/CertificationExperience";
+
 export default function Home() {
   return (
     <main>
@@ -19,15 +20,22 @@ export default function Home() {
 
       <CapabilitiesSection />
 
+      <ProjectsSection />
+
       <FeaturedProject />
 
       <SentinelExperience />
-       <GuideInExperience />;
-       <OCRExperience />
-      <ProjectsSection />
+
+      <GuideInExperience />
+
+      <OCRExperience />
+
       <ExperienceSection />
+
       <EducationExperience />
+
       <CertificationExperience />
+
       <ContactSection />
     </main>
   );
