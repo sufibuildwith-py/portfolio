@@ -1,7 +1,6 @@
 import { CinematicHero } from "@/components/hero/CinematicHero";
 import { IdentitySection } from "@/components/about/IdentitySection";
 import { FeaturedProject } from "@/components/projects/FeaturedProject";
-import { SentinelSection } from "@/components/sentinel/SentinelSection";
 import { SentinelExperience } from "@/components/sentinel/SentinelExperience";
 import { CapabilitiesSection } from "@/components/capabilities/CapabilitiesSection";
 import ContactSection from "@/components/ContactSection";
