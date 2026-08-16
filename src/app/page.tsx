@@ -6,6 +6,10 @@ import { CapabilitiesSection } from "@/components/capabilities/CapabilitiesSecti
 import ContactSection from "@/components/ContactSection";
 import { ProjectsSection } from "@/app/_sections/projects/ProjectsSection";
 import ExperienceSection from "@/app/_sections/experience/ExperienceSection";
+import GuideInExperience from "@/components/guidein/GuideInExperience";
+import OCRExperience from "@/components/ocr/OCRExperience";
+import EducationExperience from "@/components/education/EducationExperience";
+import CertificationExperience from "@/components/certificates/CertificationExperience";
 export default function Home() {
   return (
     <main>
@@ -18,8 +22,12 @@ export default function Home() {
       <FeaturedProject />
 
       <SentinelExperience />
+       <GuideInExperience />;
+       <OCRExperience />
       <ProjectsSection />
       <ExperienceSection />
+      <EducationExperience />
+      <CertificationExperience />
       <ContactSection />
     </main>
   );
