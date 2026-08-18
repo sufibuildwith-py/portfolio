@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import { basehub } from "basehub";
@@ -113,6 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   <main className="min-h-[calc(100svh-var(--header-height))]">
     {children}
   </main>
+  <Analytics />
 </Providers>
       </body>
     </html>
