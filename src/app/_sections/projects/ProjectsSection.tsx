@@ -33,9 +33,9 @@ const projects: Project[] = [
     category: "AI CAREER INTELLIGENCE",
     year: "2026",
     description:
-      "An AI-powered career guidance system designed to help users understand their skills, explore career paths and interact with an intelligent guidance layer , developed in 2024 later I updated it and turned it into a full stack project by making a UI for.",
+      "An AI-powered career guidance system designed to help users understand their skills, explore career paths and interact with an intelligent guidance layer , developed in 2024 later Updated and turned it into a full stack project.",
     stack: ["JAVA", "GEMINI API", "MAVEN", "JACKSON" , "SPRING BOOT" , "TYPESCRIPT"],
-    status: "ACTIVE DEVELOPMENT",
+    status: "COMPLETED & DEPLOYED",
     statusType: "development",
     type: "PERSONAL PROJECT",
     metric: "AI",
@@ -77,7 +77,7 @@ const projects: Project[] = [
     description:
       "A privacy-focused document processing workflow built around local OCR, structured extraction and automation for identity-document processing, to keep the customer's data private I Implemented it as an ELECTRON offline application.",
     stack: ["TYPESCRIPT", "TESSERACT.JS", "OCR", "NODE.JS" , "ELECTRON"],
-    status: "PROTOTYPE",
+    status: "PROTOTYPE RELEASED",
     statusType: "development",
     type: "INTERNSHIP PROJECT",
     metric: "LOCAL",
