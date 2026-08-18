@@ -7,9 +7,6 @@ export function FeaturedProject() {
   const sectionRef = useRef<HTMLElement>(null);
 
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [latency, setLatency] = useState(428);
-  const [requests, setRequests] = useState(1842);
-
   useEffect(() => {
     const section = sectionRef.current;
 
@@ -104,26 +101,6 @@ export function FeaturedProject() {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLatency(
-        Math.floor(
-          380 +
-            Math.random() * 180
-        )
-      );
-
-      setRequests(
-        Math.floor(
-          1700 +
-            Math.random() * 400
-        )
-      );
-    }, 1400);
-
-    return () =>
-      clearInterval(interval);
-  }, []);
 
   return (
     <section
@@ -149,19 +126,19 @@ export function FeaturedProject() {
       {/* Background telemetry */}
 
       <div className="sentinel-telemetry telemetry-one">
-        <span>LATENCY</span>
-        <strong>{latency}ms</strong>
-      </div>
+  <span>INPUT</span>
+  <strong>INCIDENT</strong>
+</div>
 
-      <div className="sentinel-telemetry telemetry-two">
-        <span>REQUESTS / SEC</span>
-        <strong>{requests}</strong>
-      </div>
+<div className="sentinel-telemetry telemetry-two">
+  <span>CONTEXT</span>
+  <strong>RETRIEVED</strong>
+</div>
 
-      <div className="sentinel-telemetry telemetry-three">
-        <span>VECTOR SEARCH</span>
-        <strong>ACTIVE</strong>
-      </div>
+<div className="sentinel-telemetry telemetry-three">
+  <span>ANALYSIS</span>
+  <strong>GROUNDED</strong>
+</div>
 
       {/* Main */}
 

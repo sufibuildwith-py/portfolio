@@ -109,51 +109,75 @@ export default function Certifications() {
   const [progress, setProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    const updateScroll = () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
+ useEffect(() => {
+  let frame = 0;
 
-      rafRef.current = requestAnimationFrame(() => {
-        if (!sectionRef.current) return;
+  const update = () => {
+    frame = 0;
 
-        const rect = sectionRef.current.getBoundingClientRect();
-        const scrollable = rect.height - window.innerHeight;
+    const section = sectionRef.current;
 
-        if (scrollable <= 0) return;
+    if (!section) return;
 
-        const rawProgress = -rect.top / scrollable;
-        const nextProgress = clamp(rawProgress, 0, 1);
+    const rect = section.getBoundingClientRect();
 
-        setProgress(nextProgress);
+    const scrollable =
+      section.offsetHeight - window.innerHeight;
 
-        const index = Math.min(
-          certifications.length - 1,
-          Math.floor(nextProgress * certifications.length)
-        );
+    if (scrollable <= 0) {
+      setProgress(0);
+      setActiveIndex(0);
+      return;
+    }
 
-        setActiveIndex(index);
-      });
-    };
+    const value = -rect.top / scrollable;
+    const nextProgress = clamp(value, 0, 1);
 
-    updateScroll();
+    setProgress(nextProgress);
 
-    window.addEventListener("scroll", updateScroll, {
-      passive: true,
-    });
+    const index = Math.min(
+      certifications.length - 1,
+      Math.floor(nextProgress * certifications.length)
+    );
 
-    window.addEventListener("resize", updateScroll);
+    setActiveIndex(index);
+  };
 
-    return () => {
-      window.removeEventListener("scroll", updateScroll);
-      window.removeEventListener("resize", updateScroll);
+  const handleScroll = () => {
+    if (frame) return;
 
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
+    frame = window.requestAnimationFrame(update);
+  };
+
+  update();
+
+  window.addEventListener(
+    "scroll",
+    handleScroll,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    handleScroll
+  );
+
+  return () => {
+    window.removeEventListener(
+      "scroll",
+      handleScroll
+    );
+
+    window.removeEventListener(
+      "resize",
+      handleScroll
+    );
+
+    if (frame) {
+      window.cancelAnimationFrame(frame);
+    }
+  };
+}, []);
 
   const activeCertification = certifications[activeIndex]!;
 
