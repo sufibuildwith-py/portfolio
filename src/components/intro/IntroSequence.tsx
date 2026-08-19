@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -9,281 +10,103 @@ const WORDS = [
   "ARCHITECT",
   "AUTOMATOR",
   "ENGINEERS",
-];
+  "PORTFOLIO",
+] as const;
 
-const FINAL_WORD = "PORTFOLIO";
+const IDENTITY_WORDS = WORDS.slice(0, 5);
 
-const GLITCH_CHARS =
-  "!@#$%^&*<>?/\\|[]{}01XZAI";
-
-function randomChar() {
-  return (
-    GLITCH_CHARS[
-      Math.floor(
-        Math.random() * GLITCH_CHARS.length
-      )
-    ] ?? "X"
-  );
-}
-
-function corruptWord(
-  target: string,
-  progress: number
-) {
-  return target
-    .split("")
-    .map((char, index) => {
-      if (char === " ") {
-        return " ";
-      }
-
-      const threshold =
-        progress * target.length;
-
-      if (index < threshold) {
-        return char;
-      }
-
-      return Math.random() > 0.3
-        ? randomChar()
-        : char;
-    })
-    .join("");
-}
+type Phase = "identity" | "portfolio" | "exit";
 
 export default function IntroSequence() {
-  const [visible, setVisible] =
-    useState(true);
+  const [visible, setVisible] = useState(true);
+  const [word, setWord] = useState<string>(WORDS[0]);
+  const [phase, setPhase] = useState<Phase>("identity");
+  const [index, setIndex] = useState(0);
 
-  const [wordIndex, setWordIndex] =
-    useState(0);
+ useEffect(() => {
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
-  const [displayWord, setDisplayWord] =
-    useState(WORDS[0]);
+  if (reducedMotion) {
+    setWord("PORTFOLIO");
+    setPhase("portfolio");
 
-  const [phase, setPhase] = useState<
-    "identity" | "lock" | "exit"
-  >("identity");
-
-  useEffect(() => {
-    /*
-     * ---------------------------------------
-     * ONLY SHOW ONCE PER SESSION
-     * ---------------------------------------
-     */
-
-    const alreadyVisited =
-      sessionStorage.getItem(
-        "portfolio-intro-seen"
-      );
-
-    if (alreadyVisited) {
+    const timeout = window.setTimeout(() => {
       setVisible(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }
+
+  let wordIndex = 0;
+  let animationFrame = 0;
+  let startTime = performance.now();
+
+  const WORD_DURATION = 1050;
+  const PORTFOLIO_DURATION = 1700;
+
+  const animate = (time: number) => {
+    const elapsed = time - startTime;
+
+    if (wordIndex < IDENTITY_WORDS.length) {
+      if (elapsed >= WORD_DURATION) {
+        wordIndex += 1;
+        startTime = time;
+
+        if (wordIndex < IDENTITY_WORDS.length) {
+          setIndex(wordIndex);
+          setWord(IDENTITY_WORDS[wordIndex]!);
+
+          animationFrame =
+            requestAnimationFrame(animate);
+
+          return;
+        }
+
+        setWord("PORTFOLIO");
+        setPhase("portfolio");
+
+        startTime = time;
+
+        animationFrame =
+          requestAnimationFrame(animate);
+
+        return;
+      }
+
+      animationFrame =
+        requestAnimationFrame(animate);
+
       return;
     }
 
-    /*
-     * ---------------------------------------
-     * REDUCED MOTION
-     * ---------------------------------------
-     */
+    if (phase === "portfolio") {
+      if (elapsed >= PORTFOLIO_DURATION) {
+        setPhase("exit");
 
-    const reducedMotion =
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-    if (reducedMotion) {
-      setPhase("lock");
-      setDisplayWord(FINAL_WORD);
-
-      const timeout =
         window.setTimeout(() => {
-          sessionStorage.setItem(
-            "portfolio-intro-seen",
-            "true"
-          );
-
           setVisible(false);
-        }, 1200);
-
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-
-    /*
-     * ---------------------------------------
-     * TIMING
-     * ---------------------------------------
-     */
-
-    const WORD_DURATION = 1100;
-    const FINAL_DURATION = 1800;
-    const EXIT_DURATION = 700;
-
-    let animationFrame = 0;
-    let finalTimeout = 0;
-    let exitTimeout = 0;
-
-    let currentWord = 0;
-
-    let wordStart =
-      performance.now();
-
-    /*
-     * ---------------------------------------
-     * MAIN ANIMATION
-     * ---------------------------------------
-     */
-
-    const animate = (time: number) => {
-      const wordElapsed =
-        time - wordStart;
-
-      /*
-       * -------------------------------------
-       * MOVE TO NEXT WORD
-       * -------------------------------------
-       */
-
-      if (
-        wordElapsed >= WORD_DURATION &&
-        currentWord <
-          WORDS.length - 1
-      ) {
-        currentWord += 1;
-
-        wordStart = time;
-
-        setWordIndex(currentWord);
-      }
-
-      /*
-       * -------------------------------------
-       * FINAL IDENTITY WORD FINISHED
-       * -------------------------------------
-       */
-
-      if (
-        currentWord ===
-          WORDS.length - 1 &&
-        wordElapsed >= WORD_DURATION
-      ) {
-        setPhase("lock");
-        setDisplayWord(FINAL_WORD);
-
-        /*
-         * Hold PORTFOLIO on screen
-         */
-
-        finalTimeout =
-          window.setTimeout(() => {
-            setPhase("exit");
-
-            /*
-             * Let the CSS exit animation play
-             */
-
-            exitTimeout =
-              window.setTimeout(() => {
-                sessionStorage.setItem(
-                  "portfolio-intro-seen",
-                  "true"
-                );
-
-                setVisible(false);
-              }, EXIT_DURATION);
-          }, FINAL_DURATION);
+        }, 900);
 
         return;
       }
-
-      /*
-       * -------------------------------------
-       * GLITCH / WORD REVEAL
-       * -------------------------------------
-       */
-
-      const progress = Math.min(
-        wordElapsed /
-          WORD_DURATION,
-        1
-      );
-
-      /*
-       * Keep the beginning heavily corrupted,
-       * then progressively reveal the word.
-       */
-
-      const glitchProgress =
-        Math.max(
-          0,
-          progress - 0.15
-        ) / 0.85;
-
-      const target =
-        WORDS[currentWord];
-
-      if (!target) {
-        animationFrame =
-          requestAnimationFrame(
-            animate
-          );
-
-        return;
-      }
-
-      setDisplayWord(
-        corruptWord(
-          target,
-          glitchProgress
-        )
-      );
 
       animationFrame =
-        requestAnimationFrame(
-          animate
-        );
-    };
+        requestAnimationFrame(animate);
+    }
+  };
 
-    /*
-     * ---------------------------------------
-     * START
-     * ---------------------------------------
-     */
+  setWord(IDENTITY_WORDS[0]!);
+  setIndex(0);
 
-    animationFrame =
-      requestAnimationFrame(
-        animate
-      );
+  animationFrame =
+    requestAnimationFrame(animate);
 
-    /*
-     * ---------------------------------------
-     * CLEANUP
-     * ---------------------------------------
-     */
-
-    return () => {
-      cancelAnimationFrame(
-        animationFrame
-      );
-
-      clearTimeout(
-        finalTimeout
-      );
-
-      clearTimeout(
-        exitTimeout
-      );
-    };
-  }, []);
-
-  /*
-   * ---------------------------------------
-   * SKIP INTRO
-   * ---------------------------------------
-   */
+  return () => {
+    cancelAnimationFrame(animationFrame);
+  };
+}, [phase]);
 
   const skipIntro = () => {
     sessionStorage.setItem(
@@ -295,165 +118,122 @@ export default function IntroSequence() {
 
     window.setTimeout(() => {
       setVisible(false);
-    }, 250);
+    }, 350);
   };
-
-  /*
-   * ---------------------------------------
-   * HIDDEN
-   * ---------------------------------------
-   */
 
   if (!visible) {
     return null;
   }
 
-  /*
-   * ---------------------------------------
-   * RENDER
-   * ---------------------------------------
-   */
+  const isPortfolio =
+    phase === "portfolio";
 
   return (
     <div
-      className={`intro-sequence intro-${phase}`}
+      className={`intro-sequence ${
+        isPortfolio ? "intro-portfolio" : ""
+      } ${
+        phase === "exit" ? "intro-exit" : ""
+      }`}
       aria-hidden="true"
     >
+      {/* =====================================================
+          ATMOSPHERE
+          ===================================================== */}
 
-      {/* Atmospheric layers */}
+      <div className="intro-stars intro-stars-one" />
+      <div className="intro-stars intro-stars-two" />
+      <div className="intro-stars intro-stars-three" />
 
-      <div className="intro-noise" />
+      <div className="intro-orbit intro-orbit-one" />
+      <div className="intro-orbit intro-orbit-two" />
+      <div className="intro-orbit intro-orbit-three" />
 
-      <div className="intro-grid" />
-
-      <div className="intro-scanlines" />
+      <div className="intro-orbit-dot intro-orbit-dot-one" />
+      <div className="intro-orbit-dot intro-orbit-dot-two" />
+      <div className="intro-orbit-dot intro-orbit-dot-three" />
 
       <div className="intro-vignette" />
 
-      {/* Glitch bars */}
-
-      <div className="intro-glitch-bar intro-glitch-bar-1" />
-
-      <div className="intro-glitch-bar intro-glitch-bar-2" />
-
-      <div className="intro-glitch-bar intro-glitch-bar-3" />
-
-      {/* Main interface */}
+      {/* =====================================================
+          MAIN INTERFACE
+          ===================================================== */}
 
       <div className="intro-interface">
 
-        {/* Top system information */}
+        {/* ---------------------------------------------------
+            TOP SYSTEM MARKER
+            --------------------------------------------------- */}
 
         <div className="intro-topline">
-
-          <span>
-            SYS / 001
-          </span>
+          <span>SYS / 001</span>
 
           <span>
             PERSONAL SYSTEM
           </span>
 
-          <span>
-            2027
-          </span>
-
+          <span>2027</span>
         </div>
 
-        {/* Center */}
+        {/* ---------------------------------------------------
+            CENTER
+            --------------------------------------------------- */}
 
         <div className="intro-center">
 
           <div className="intro-status">
-
-            <i />
+            <span className="intro-status-dot" />
 
             <span>
-              {phase === "lock"
-                ? "IDENTITY LOCKED"
-                : phase === "exit"
-                ? "ACCESS GRANTED"
-                : "IDENTITY SCAN"}
+              {isPortfolio
+                ? "SYSTEM READY"
+                : "IDENTITY / SCANNING"}
             </span>
-
           </div>
-
-          {/* Word */}
 
           <div className="intro-word-wrapper">
 
-            {/* Red glitch layer */}
-
-            <span className="intro-word-glitch intro-word-red">
-              {displayWord}
-            </span>
-
-            {/* Blue glitch layer */}
-
-            <span className="intro-word-glitch intro-word-blue">
-              {displayWord}
-            </span>
-
-            {/* Main word */}
-
-            <h1
+            <div
+              key={word}
               className={`intro-word ${
-                phase === "lock"
+                isPortfolio
                   ? "intro-word-final"
                   : ""
               }`}
-              data-text={displayWord}
             >
-              {displayWord}
-            </h1>
+              {word}
+            </div>
+
+            <div className="intro-word-line" />
 
           </div>
 
-          {/* Counter */}
-
           <div className="intro-subtitle">
-
-            {phase === "lock"
-              ? "SYSTEM READY"
-              : phase === "exit"
+            {isPortfolio
               ? "ACCESS GRANTED"
               : `IDENTITY / ${String(
-                  wordIndex + 1
-                ).padStart(
-                  2,
-                  "0"
-                )} — 05`}
-
+                  index + 1
+                ).padStart(2, "0")} — 05`}
           </div>
 
         </div>
 
-        {/* Bottom */}
+        {/* ---------------------------------------------------
+            BOTTOM
+            --------------------------------------------------- */}
 
         <div className="intro-bottom">
 
-          {/* Progress */}
-
           <div className="intro-progress">
-
             <span
               className="intro-progress-fill"
               style={{
-                width:
-                  phase === "lock"
-                    ? "100%"
-                    : `${Math.min(
-                        ((wordIndex + 1) /
-                          WORDS.length) *
-                          100,
-                        96
-                      )}%`,
+                width: isPortfolio
+                  ? "100%"
+                  : `${((index + 1) / 5) * 100}%`,
               }}
             />
-
           </div>
-
-          {/* Metadata */}
 
           <div className="intro-footer-meta">
 
@@ -478,7 +258,6 @@ export default function IntroSequence() {
         </div>
 
       </div>
-
     </div>
   );
 }
