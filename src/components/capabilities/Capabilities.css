@@ -1546,19 +1546,6 @@
    READOUT BODY
    ========================================================= */
 
-.readout-body {
-  display:
-    grid;
-
-  grid-template-columns:
-    1fr
-    .8fr;
-
-  min-height:
-    650px;
-}
-
-
 /* =========================================================
    DESCRIPTION
    ========================================================= */
@@ -1610,8 +1597,16 @@
 
   font-weight:
     500;
-}
 
+  max-width:
+    100%;
+
+  overflow-wrap:
+    normal;
+
+  word-break:
+    normal;
+}
 
 .readout-description h3 span {
   background:
@@ -2355,18 +2350,13 @@
 
 
   .readout-body {
-    grid-template-columns:
-      1fr;
-  }
+  display: block;
+}
 
 
   .readout-description {
-    border-right:
-      0;
-
-    border-bottom:
-      1px solid
-      rgba(255,255,255,0.07);
+  max-width: 850px;
+}
   }
 
 
@@ -2375,7 +2365,6 @@
       500px;
   }
 
-}
 
 
 /* =========================================================
@@ -2631,9 +2620,24 @@
 
 
   .readout-description h3 {
-    font-size:
-      3.3rem;
-  }
+  font-size:
+    clamp(2.35rem, 12vw, 3.3rem);
+
+  line-height:
+    .88;
+
+  letter-spacing:
+    -.055em;
+
+  max-width:
+    100%;
+
+  overflow-wrap:
+    normal;
+
+  word-break:
+    normal;
+}
 
 
   .readout-description > p {
@@ -2792,10 +2796,19 @@
   }
 
 
-  .readout-description h3 {
-    font-size:
-      2.8rem;
-  }
+.readout-description h3 {
+  font-size:
+    clamp(2.2rem, 12vw, 2.8rem);
+
+  line-height:
+    .88;
+
+  letter-spacing:
+    -.05em;
+
+  max-width:
+    100%;
+}
 
 
   .readout-core {

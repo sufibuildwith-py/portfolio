@@ -44,7 +44,7 @@ const experiences: Experience[] = [
     organization: "Ideal Web Solutions",
     role: "BACKEND / AI AUTOMATION",
     type: "current",
-    location: "REMOTE / INDIA",
+    location: "HYBRID / INDIA",
     description:
       "Building privacy-focused document intelligence and workflow automation systems designed to reduce repetitive operational work through local processing, OCR and structured extraction.",
     technologies: [
@@ -61,10 +61,10 @@ const experiences: Experience[] = [
       "Structured identity-data parsing",
       "Workflow automation",
     ],
-    signal: "ACTIVE",
+    signal: "INTERN",
     signalLabel: "CURRENT ROLE",
     status: "ONLINE",
-    statusLabel: "ACTIVE",
+    statusLabel: "INTERN",
   },
   {
     id: "independent-systems",
@@ -976,45 +976,7 @@ if (index >= 0) {
           </span>
         </div>
 
-        <div className="experience-stage">
-          <div className="experience-stage-copy">
-            <span>
-              CAREER
-              <br />
-              TELEMETRY
-            </span>
-
-            <i />
-          </div>
-
-          <OrbitField
-            activeIndex={activeIndex}
-          />
-
-          <ExperienceSignal
-            experience={
-              activeExperience
-            }
-            index={activeIndex}
-            active
-          />
-        </div>
-
-        <div
-          ref={timelineRef}
-          className="experience-timeline"
-          role="list"
-          aria-label="Professional experience and education"
-        >
-          <div className="experience-timeline-rail">
-            <span
-              style={{
-                height: `${
-                  scrollProgress * 100
-                }%`,
-              }}
-            />
-          </div>
+        <div>
 
           <div className="experience-timeline-marker">
             <span />
@@ -1101,78 +1063,8 @@ if (index >= 0) {
               ),
             )}
           </div>
-
-          <div className="experience-trajectory-footer">
-            <span>
-              KANPUR / INDIA
-            </span>
-
-            <span>
-              AI × SOFTWARE ENGINEERING
-            </span>
-
-            <span>
-              {currentYear}
-            </span>
-          </div>
-        </section>
-
-        <div className="experience-final-signal">
-          <div className="experience-final-signal-line" />
-
-          <div className="experience-final-signal-content">
-            <span>
-              NEXT TRANSMISSION
-            </span>
-
-            <strong>
-              BUILDING WHAT
-              <br />
-              COMES NEXT.
-            </strong>
-
-            <div>
-              <StatusLight type="current" />
-
-              <span>
-                SYSTEM STATUS:
-              </span>
-
-              <b>ONLINE</b>
-            </div>
-          </div>
-
-          <div className="experience-final-signal-meta">
-            <span>05 / 05</span>
-
-            <span>
-              EXPERIENCE SYSTEM
-            </span>
-
-            <span>
-              {currentYear}
-            </span>
-          </div>
-        </div>
-
-        <footer className="experience-footer">
-          <div className="experience-footer-line" />
-
-          <div className="experience-footer-content">
-            <span>
-              MORE TO BUILD
-            </span>
-
-            <span>
-              SOFTWARE × INTELLIGENCE
-            </span>
-
-            <span>
-              05
-            </span>
-          </div>
-        </footer>
-      </div>
+       </section>
+      </div>  
     </section>
   );
 }

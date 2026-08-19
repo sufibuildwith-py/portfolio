@@ -48,24 +48,24 @@ technologies: ["GIT", "C++", "PYTHON", "JAVA", "JAVASCRIPT", "TYPESCRIPT", "REAC
 
 const metrics = [
   {
-    label: "AI",
+    label: "AI MODELS",
     value: 86,
-    detail: "MODELS",
+    detail: "",
   },
   {
-    label: "API",
+    label: "API SERVICES",
     value: 78,
-    detail: "SERVICES",
+    detail: "",
   },
   {
-    label: "DATA",
+    label: "DATA SYSTEMS",
     value: 72,
-    detail: "SYSTEMS",
+    detail: "",
   },
   {
-    label: "CODE",
+    label: "CODE ENGINEERING",
     value: 91,
-    detail: "ENGINEERING",
+    detail: "",
   },
 ];
 
@@ -320,8 +320,13 @@ export function CapabilitiesSection() {
             </div>
 
           </div>
+<div className="readout-body">
 
-          <div className="readout-body">
+  <div className="readout-description">
+    {/* your existing IDEA → IMPLEMENTATION content */}
+  </div>
+
+</div>
 
             {/* -----------------------------------------------
                 LEFT SIDE
@@ -392,51 +397,6 @@ export function CapabilitiesSection() {
             {/* -----------------------------------------------
                 RIGHT SIDE
                 ----------------------------------------------- */}
-
-            <div className="readout-visual">
-
-              <div className="readout-core">
-
-                <div className="core-ring core-ring-one" />
-                <div className="core-ring core-ring-two" />
-                <div className="core-ring core-ring-three" />
-
-                <div className="core-center">
-
-                  <span className="core-label">
-                    CORE
-                  </span>
-
-                  <strong>
-                    BASE
-                  </strong>
-
-                  <span className="core-state">
-                    ONLINE
-                  </span>
-
-                </div>
-
-              </div>
-
-              <div className="readout-coordinates">
-                <span>
-                  X 048.21
-                </span>
-
-                <span>
-                  Y 091.44
-                </span>
-
-                <span>
-                  Z 017.08
-                </span>
-              </div>
-
-            </div>
-
-          </div>
-
           {/* -----------------------------------------------
               METRICS
               ----------------------------------------------- */}

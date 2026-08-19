@@ -99,55 +99,6 @@ const projects: Project[] = [
   },
 ];
 
-function ProjectVisual({
-  project,
-  index,
-  active,
-}: {
-  project: Project;
-  index: number;
-  active: boolean;
-}) {
-  return (
-    <div
-      className={`project-visual ${
-        active ? "project-visual-active" : ""
-      }`}
-      aria-hidden="true"
-    >
-      <div className="project-visual-noise" />
-      <div className="project-visual-grid" />
-
-      <div className="project-visual-orbit project-visual-orbit-one" />
-      <div className="project-visual-orbit project-visual-orbit-two" />
-      <div className="project-visual-orbit project-visual-orbit-three" />
-
-      <div className="project-visual-core">
-        <span>{project.number}</span>
-      </div>
-
-      <div className="project-visual-lines">
-        <i />
-        <i />
-        <i />
-        <i />
-      </div>
-
-      <div className="project-visual-coordinates">
-        <span>
-          SYS.{String(index + 1).padStart(2, "0")}
-        </span>
-
-        <span>{project.year}</span>
-      </div>
-
-      <div className="project-visual-title">
-        {project.title}
-      </div>
-    </div>
-  );
-}
-
 function StatusIndicator({
   type,
 }: {
@@ -657,66 +608,7 @@ export function ProjectsSection() {
             })}
           </div>
 
-          <aside className="project-preview">
-            <div className="project-preview-top">
-              <span>LIVE PREVIEW</span>
-
-              <span>{active.number}</span>
-            </div>
-
-            <ProjectVisual
-              project={active}
-              index={activeProject}
-              active
-            />
-
-            <div className="project-preview-bottom">
-              <div>
-                <span className="project-preview-label">
-                  TYPE
-                </span>
-
-                <strong>
-                  {active.type}
-                </strong>
-              </div>
-
-              <div>
-                <span className="project-preview-label">
-                  {active.metricLabel}
-                </span>
-
-                <strong>
-                  {active.metric}
-                </strong>
-              </div>
-            </div>
-
-            {active.href ? (
-              <Link
-                href={active.href}
-                className="project-preview-link"
-                target={
-                  active.external
-                    ? "_blank"
-                    : undefined
-                }
-                rel={
-                  active.external
-                    ? "noreferrer"
-                    : undefined
-                }
-              >
-                VIEW PROJECT
-                <span>↗</span>
-              </Link>
-            ) : (
-              <div className="project-preview-link project-preview-link-disabled">
-                PROJECT IN DEVELOPMENT
-                <span>—</span>
-              </div>
-            )}
-          </aside>
+        
         </div>
 
         <div className="projects-progress">
@@ -745,25 +637,8 @@ export function ProjectsSection() {
               )}
             </span>
 
-            <span>PROJECT INDEX</span>
           </div>
         </div>
-
-        <footer className="projects-footer">
-          <div className="projects-footer-line" />
-
-          <div className="projects-footer-content">
-            <span>
-              MORE SYSTEMS IN DEVELOPMENT
-            </span>
-
-            <span>
-              AI × SOFTWARE ENGINEERING
-            </span>
-
-            <span>2026</span>
-          </div>
-        </footer>
       </div>
     </section>
   );
