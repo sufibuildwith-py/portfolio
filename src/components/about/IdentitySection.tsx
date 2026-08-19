@@ -171,22 +171,41 @@ export function IdentitySection() {
             </h2>
 
             <div className="identity-summary">
-              <p>
-                I&apos;m Sufiyan — an AI & ML engineer in the
-                making, building at the intersection of
-                intelligent systems and practical software.
-              </p>
+  <p>
+    I&apos;m Sufiyan — an AI & ML engineer in the making,
+    building at the intersection of intelligent systems and
+    practical software.
+  </p>
+
+  <p>
+    Experienced in building Java-based applications that
+    integrate REST APIs with Generative AI services, with
+    practical exposure to predictive modeling, data analysis,
+    NLP, and LLM-based applications.
+  </p>
+
+  <p>
+    Hands-on experience with shipping a fully offline,
+    production-validated OCR desktop application.
+  </p>
+
+  <p>
+    Independently designing and engineering a custom,
+    animation-driven portfolio site from scratch.
+  </p>
+  <p>
+    Currently expanding expertise in deep learning,
+    Retrieval-Augmented Generation (RAG), and Spring Boot to
+    develop scalable AI-powered applications.
+  </p>
 
               <p>
                 I enjoy turning ideas into things that actually
-                work — from AI-powered applications and backend
-                systems to automation tools that solve real
-                problems.
+                work.
               </p>
 
               <p className="identity-summary-small">
-                Curious by nature. Backend at heart.
-                Always building.
+                somewhere between dreaming and building ~
               </p>
             </div>
 

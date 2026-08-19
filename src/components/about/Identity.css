@@ -190,23 +190,21 @@
 
 .identity-summary {
   margin-top: 48px;
-
-  max-width: 520px;
+  max-width: 560px;
 }
 
 .identity-summary p {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
 
-  font-size: 16px;
-  line-height: 1.75;
+  font-size: 15px;
+  line-height: 1.7;
 
-  color: rgba(255,255,255,.62);
+  color: rgba(255, 255, 255, 0.62);
 }
 
-.identity-summary p:first-child {
-  color: rgba(255,255,255,.82);
+.identity-summary p:last-child {
+  margin-bottom: 0;
 }
-
 .identity-summary-small {
   margin-top: 28px !important;
 
