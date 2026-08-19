@@ -10,33 +10,38 @@ import GuideInExperience from "@/components/guidein/GuideInExperience";
 import OCRExperience from "@/components/ocr/OCRExperience";
 import EducationExperience from "@/components/education/EducationExperience";
 import CertificationExperience from "@/components/certificates/CertificationExperience";
+import IntroSequence from "@/components/intro/IntroSequence";
 
 export default function Home() {
   return (
-    <main>
-      <CinematicHero />
+    <>
+      <IntroSequence />
 
-      <IdentitySection />
+      <main>
+        <CinematicHero />
 
-      <CapabilitiesSection />
+        <IdentitySection />
 
-      <ProjectsSection />
+        <CapabilitiesSection />
 
-      <FeaturedProject />
+        <ProjectsSection />
 
-      <SentinelExperience />
+        <FeaturedProject />
 
-      <GuideInExperience />
+        <SentinelExperience />
 
-      <OCRExperience />
+        <GuideInExperience />
 
-      <ExperienceSection />
+        <OCRExperience />
 
-      <EducationExperience />
+        <ExperienceSection />
 
-      <CertificationExperience />
+        <EducationExperience />
 
-      <ContactSection />
-    </main>
+        <CertificationExperience />
+
+        <ContactSection />
+      </main>
+    </>
   );
 }
