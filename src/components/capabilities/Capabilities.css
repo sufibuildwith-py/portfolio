@@ -1693,3 +1693,54 @@ backdrop-filter: blur(24px) saturate(110%);
     );
   pointer-events: none;
 }
+/* =========================================================
+   ANDROID CHROME — SCROLL COMPOSITING STABILITY
+   ========================================================= */
+
+@media screen and (max-width: 900px) {
+  .capabilities-section {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  .capabilities-viewport {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .capabilities-stage,
+  .capabilities-dive,
+  .capability-environment,
+  .capability-forest,
+  .capability-desert,
+  .capability-ocean,
+  .capability-terrain {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+
+  .forest-image,
+  .desert-image,
+  .ocean-image,
+  .terrain-image {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+
+  .capability-region {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+@media screen and (max-width: 900px) {
+  .capability-region {
+    backdrop-filter: blur(8px) saturate(105%);
+    -webkit-backdrop-filter: blur(8px) saturate(105%);
+  }
+}
