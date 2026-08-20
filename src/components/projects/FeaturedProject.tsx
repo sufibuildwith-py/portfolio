@@ -112,7 +112,7 @@ export function FeaturedProject() {
             scrollProgress,
         } as React.CSSProperties
       }
-    >
+    ><div className="sentinel-background" />
       {/* Ambient system field */}
 
       <div className="sentinel-grid" />
