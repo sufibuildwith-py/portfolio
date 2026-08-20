@@ -1741,3 +1741,53 @@ backdrop-filter: blur(24px) saturate(110%);
     -webkit-backdrop-filter: blur(8px) !important;
   }
 }
+/* =========================================================
+   ANDROID CHROME — FLAT COMPOSITING MODE
+   ========================================================= */
+
+@media (pointer: coarse) and (hover: none) {
+
+  .capabilities-section,
+  .capabilities-viewport,
+  .capabilities-stage,
+  .capabilities-interface,
+  .capabilities-hud,
+  .capability-regions,
+  .capabilities-dive,
+  .capability-environment,
+  .capability-forest,
+  .capability-desert,
+  .capability-ocean,
+  .capability-terrain {
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
+    perspective: none !important;
+  }
+
+  .capabilities-topbar,
+  .capability-counter,
+  .capability-index,
+  .capabilities-bottom {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .capability-region {
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .forest-image,
+  .desert-image,
+  .ocean-image,
+  .terrain-image {
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
+    will-change: auto !important;
+  }
+}
