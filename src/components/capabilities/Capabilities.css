@@ -1694,53 +1694,50 @@ backdrop-filter: blur(24px) saturate(110%);
   pointer-events: none;
 }
 /* =========================================================
-   ANDROID CHROME — SCROLL COMPOSITING STABILITY
+   ANDROID CHROME — COMPOSITING STABILITY PATCH
    ========================================================= */
 
-@media screen and (max-width: 900px) {
-  .capabilities-section {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+@media (pointer: coarse) and (hover: none) {
+
+  /* Stop creating a giant 3D scene */
+  .capabilities-stage {
+    perspective: none !important;
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
   }
 
-  .capabilities-viewport {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-
-  .capabilities-stage,
+  /* Prevent nested 3D compositing */
+  .capabilities-viewport,
+  .capabilities-interface,
+  .capabilities-hud,
+  .capability-regions,
   .capabilities-dive,
   .capability-environment,
   .capability-forest,
   .capability-desert,
   .capability-ocean,
   .capability-terrain {
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
   }
 
+  /* Simplify the large image layers */
   .forest-image,
   .desert-image,
   .ocean-image,
   .terrain-image {
+    will-change: auto !important;
+    transform-style: flat !important;
+    -webkit-transform-style: flat !important;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
   }
 
+  /* Reduce expensive backdrop compositing */
   .capability-region {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-}
-@media screen and (max-width: 900px) {
-  .capability-region {
-    backdrop-filter: blur(8px) saturate(105%);
-    -webkit-backdrop-filter: blur(8px) saturate(105%);
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
   }
 }
