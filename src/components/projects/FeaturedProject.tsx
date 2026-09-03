@@ -261,6 +261,16 @@ export function FeaturedProject() {
             EXPLORE SYSTEM ↓
           </span>
 
+          <a
+            className="sentinel-demo-button"
+            href="https://www.youtube.com/watch?v=wjaczWAYyJc"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Play Sentinel demo on YouTube"
+          >
+            PLAY DEMO ↗
+          </a>
+
         </div>
 
       </div>
